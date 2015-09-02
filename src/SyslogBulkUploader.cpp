@@ -23,8 +23,11 @@ SOFTWARE.
  */
 
 #include "SyslogBulkUploader.h"
+#include "Reader.h"
+#include "Writer.h"
 
-SyslogBulkUploader::SyslogBulkUploader() {
+void SyslogBulkUploader::run() {
+    while (auto msg = _reader.nextMessage()) {
+        _writer.sendMessage(msg);
+    }
 }
-
-

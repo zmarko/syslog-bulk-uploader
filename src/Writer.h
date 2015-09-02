@@ -22,18 +22,16 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 
-#ifndef READER_H
-#define	READER_H
 
-#include <memory>
-#include <boost/noncopyable.hpp>
+#ifndef WRITER_H
+#define	WRITER_H
 
-class SyslogMessage;
+#include "SyslogMessage.h"
 
-class Reader : private boost::noncopyable {
+class Writer : private boost::noncopyable {
 public:
-    virtual std::shared_ptr<SyslogMessage> nextMessage() = 0;
+    virtual void sendMessage(std::shared_ptr<SyslogMessage>) = 0;
 };
 
-#endif	/* READER_H */
+#endif	/* WRITER_H */
 

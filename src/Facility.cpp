@@ -32,9 +32,7 @@ const std::string Facility::readFromStream(std::istream& src) {
         if (c == '.') {
             break;
         } else {
-            if (c != ' ' && c != '\t') {
-                ret.push_back(c);
-            }
+            ret.push_back(c);
         }
     }
     return ret;

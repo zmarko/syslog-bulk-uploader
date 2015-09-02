@@ -27,15 +27,15 @@ SOFTWARE.
 #include <boost/test/unit_test.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
 
-BOOST_AUTO_TEST_CASE(constructor_and_getters) {
-    std::stringstream source("2015-09-02 13:33:11     Local4.Critical 192.168.0.1     Kiwi_Syslog_Server %ASA-2-106007: Deny inbound UDP from 138.28.4.18/22084 to 9.28.3.28/53 due to DNS Query");
+BOOST_AUTO_TEST_CASE(parsing) {
+    std::stringstream source("2015-09-02 13:33:11     Local4.Critical 192.168.0.1     Kiwi_Syslog_Server %ASA-2-106007: Deny inbound UDP from 1.2.3.4/22084 to 4.3.2.1/53 due to DNS Query");
     boost::posix_time::ptime timestamp(boost::posix_time::time_from_string("2015-09-02 13:33:11"));
     SyslogMessage m(source);
     BOOST_CHECK_EQUAL(m.timestamp(), timestamp);
     BOOST_CHECK_EQUAL(m.facility(), Facility("Local4"));
     BOOST_CHECK_EQUAL(m.severity(), Severity("Critical"));
     BOOST_CHECK_EQUAL(m.source(), "192.168.0.1");
-    BOOST_CHECK_EQUAL(m.message(), "Kiwi_Syslog_Server %ASA-2-106007: Deny inbound UDP from 138.28.4.18/22084 to 9.28.3.28/53 due to DNS Query");
+    BOOST_CHECK_EQUAL(m.message(), "Kiwi_Syslog_Server %ASA-2-106007: Deny inbound UDP from 1.2.3.4/22084 to 4.3.2.1/53 due to DNS Query");
 }
 
 BOOST_AUTO_TEST_CASE(invalid_params) {

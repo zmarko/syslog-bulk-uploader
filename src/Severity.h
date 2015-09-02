@@ -30,10 +30,10 @@ SOFTWARE.
 class Severity {
 public:
 
-    Severity(const char* src) : Severity(std::string(src)) {
+    Severity(const std::string& src) : _value(readFromString(src)) {
     };
 
-    Severity(const std::string& src) : _value(readFromString(src)) {
+    Severity(const char* src) : Severity(std::string(src)) {
     };
 
     Severity(std::istream& source) : Severity(readFromStream(source)) {

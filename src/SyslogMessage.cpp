@@ -25,14 +25,13 @@ SOFTWARE.
 #include "SyslogMessage.h"
 
 void skipWhitespace(std::istream& src) {
-    bool whitespace = true;
-    while (src && whitespace) {
+    while (src) {
         std::istream::char_type c = src.peek();
         if (c == ' ' || c == '\t') {
             src.get();
             continue;
         } else {
-            whitespace = false;
+            break;
         }
     }
 }
@@ -55,6 +54,7 @@ const boost::posix_time::ptime SyslogMessage::readTimestamp(std::istream& src) {
 };
 
 const Facility SyslogMessage::readFacility(std::istream& src) {
+    skipWhitespace(src);
     return Facility(src);
 };
 

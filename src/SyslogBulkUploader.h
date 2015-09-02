@@ -27,11 +27,19 @@ SOFTWARE.
 
 #include <boost/noncopyable.hpp>
 
+class Reader;
+class Writer;
+
 class SyslogBulkUploader : boost::noncopyable {
 public:
-    SyslogBulkUploader();
-private:
 
+    SyslogBulkUploader(Reader& reader, Writer& writer) : _reader(reader), _writer(writer) {
+    };
+    void run();
+
+private:
+    Reader& _reader;
+    Writer& _writer;
 };
 
 #endif	/* SYSLOGBULKUPLOADER_H */

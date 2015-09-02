@@ -23,9 +23,48 @@ SOFTWARE.
  */
 
 #include "../src/SyslogBulkUploader.h"
+#include "../src/Reader.h"
+#include "../src/Writer.h"
 #define BOOST_TEST_MODULE SyslogBulkUploaderTests
 #include <boost/test/unit_test.hpp>
+#include <memory>
 
-BOOST_AUTO_TEST_CASE(fakeTest) {
-    BOOST_CHECK(true);
+class MockReader : public Reader {
+public:
+
+    virtual std::shared_ptr<SyslogMessage> nextMessage() {
+        if (_pos >= _messages.size()) {
+            return std::shared_ptr<SyslogMessage>();
+        } else {
+            std::stringstream ss(_messages[_pos++]);
+            return std::shared_ptr<SyslogMessage>(new SyslogMessage(dynamic_cast<std::istream&> (ss)));
+        }
+    }
+private:
+    std::vector<std::string> _messages = {
+        "2015-09-02 13:33:11     Local4.Critical 192.168.0.1     Kiwi_Syslog_Server %ASA-2-106007: Deny inbound UDP from 1.2.3.4/22084 to 4.3.2.1/53 due to DNS Query",
+        "2015-09-02 13:33:11     Local4.Critical 192.168.0.1     Kiwi_Syslog_Server %ASA-2-106007: Deny inbound UDP from 1.2.3.4/22084 to 4.3.2.1/53 due to DNS Query",
+        "2015-09-02 13:33:11     Local4.Critical 192.168.0.1     Kiwi_Syslog_Server %ASA-2-106007: Deny inbound UDP from 1.2.3.4/22084 to 4.3.2.1/53 due to DNS Query"
+    };
+    size_t _pos;
+};
+
+class MockWriter : public Writer {
+public:
+
+    virtual void sendMessage(std::shared_ptr<SyslogMessage> msg) {
+        _messages.push_back(msg);
+    };
+    std::vector<std::shared_ptr<SyslogMessage>> _messages;
+};
+
+BOOST_AUTO_TEST_CASE(test_run) {
+    MockReader r;
+    MockWriter w;
+    SyslogBulkUploader ul(r, w);
+    ul.run();
+    BOOST_CHECK_EQUAL(w._messages.size(), 3);
+    for (size_t i = 0; i < w._messages.size(); i++) {
+        std::cout << *(w._messages[i].get()) << std::endl;
+    }
 }

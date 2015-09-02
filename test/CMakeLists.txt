@@ -9,6 +9,7 @@ add_executable(SyslogBulkUploaderTests SyslogBulkUploaderTests.cpp)
 target_link_libraries(SyslogBulkUploaderTests
 	slbu-lib
 	${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
+        ${Boost_DATE_TIME_LIBRARY}
 )
 
 add_executable(SyslogMessageTests SyslogMessageTests.cpp)

@@ -45,22 +45,18 @@ public:
     };
 
     const Facility facility() const {
-
         return _facility;
     }
 
     const std::string message() const {
-
         return _message;
     }
 
     const Severity severity() const {
-
         return _severity;
     }
 
     const std::string source() const {
-
         return _source;
     }
 
