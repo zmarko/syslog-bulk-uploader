@@ -60,14 +60,35 @@ public:
     };
 private:
 
-    enum Value {
-        Kern = 0, User = 1, Mail = 2, Daemon = 3, Auth = 4, Syslog = 5, Lpr = 6, News = 7, Uucp = 8, Clock = 9,
-        Authpriv = 10, Ftp = 11, Ntp = 12, LogAudit = 13, LogAlert = 14, Cron = 15, Local0 = 16, Local1 = 17,
-        Local2 = 18, Local3 = 19, Local4 = 20, Local5 = 21, Local6 = 22, Local7 = 23
+    const std::map<std::string, uint8_t> _values{
+        {"kern", 0},
+        {"user", 1},
+        {"mail", 2},
+        {"daemon", 3},
+        {"auth", 4},
+        {"syslog", 5},
+        {"lpr", 6},
+        {"news", 7},
+        {"uucp", 8},
+        {"clock", 9},
+        {"authpriv", 10},
+        {"ftp", 11},
+        {"ntp", 12},
+        {"logaudit", 13},
+        {"logalert", 14},
+        {"cron", 15},
+        {"local0", 16},
+        {"local1", 17},
+        {"local2", 18},
+        {"local3", 19},
+        {"local4", 20},
+        {"local5", 21},
+        {"local6", 22},
+        {"local7", 23}
     };
-    const Value _value;
+    const uint8_t _value;
     const std::string readFromStream(std::istream&);
-    const Value readFromString(const std::string&);
+    const uint8_t readFromString(const std::string&);
 };
 
 #endif	/* FACILITY_H */

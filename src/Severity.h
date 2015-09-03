@@ -25,8 +25,6 @@ SOFTWARE.
 #ifndef SEVERITY_H
 #define	SEVERITY_H
 
-#include <istream>
-
 class Severity {
 public:
 
@@ -61,13 +59,20 @@ public:
 
 private:
 
-    enum Value {
-        Emergency = 0, Alert = 1, Critical = 2, Error = 3, Warning = 4, Notice = 5, Informational = 6, Debug = 7
+    const std::map<std::string, uint8_t> _values{
+        {"emergency", 0},
+        {"alert", 1},
+        {"critical", 2},
+        {"error", 3},
+        {"warning", 4},
+        {"notice", 5},
+        {"informational", 6},
+        {"debug", 7}
     };
 
-    const Value _value;
+    const uint8_t _value;
     const std::string readFromStream(std::istream& source);
-    const Value readFromString(const std::string& src);
+    const uint8_t readFromString(const std::string& src);
 };
 
 #endif	/* SEVERITY_H */

@@ -23,6 +23,7 @@ SOFTWARE.
  */
 
 #include <boost/algorithm/string.hpp>
+#include <map>
 #include "Facility.h"
 
 const std::string Facility::readFromStream(std::istream& src) {
@@ -38,60 +39,13 @@ const std::string Facility::readFromStream(std::istream& src) {
     return ret;
 }
 
-const Facility::Value Facility::readFromString(const std::string& src) {
-    Facility::Value ret;
-    if (boost::iequals(src, std::string("Kern"))) {
-        ret = Facility::Value::Kern;
-    } else if (boost::iequals(src, std::string("User"))) {
-        ret = Facility::Value::User;
-    } else if (boost::iequals(src, std::string("Mail"))) {
-        ret = Facility::Value::Mail;
-    } else if (boost::iequals(src, std::string("Daemon"))) {
-        ret = Facility::Value::Daemon;
-    } else if (boost::iequals(src, std::string("Auth"))) {
-        ret = Facility::Value::Auth;
-    } else if (boost::iequals(src, std::string("Syslog"))) {
-        ret = Facility::Value::Syslog;
-    } else if (boost::iequals(src, std::string("Lpr"))) {
-        ret = Facility::Value::Lpr;
-    } else if (boost::iequals(src, std::string("News"))) {
-        ret = Facility::Value::News;
-    } else if (boost::iequals(src, std::string("Uucp"))) {
-        ret = Facility::Value::Uucp;
-    } else if (boost::iequals(src, std::string("Clock"))) {
-        ret = Facility::Value::Clock;
-    } else if (boost::iequals(src, std::string("Authpriv"))) {
-        ret = Facility::Value::Authpriv;
-    } else if (boost::iequals(src, std::string("Ftp"))) {
-        ret = Facility::Value::Ftp;
-    } else if (boost::iequals(src, std::string("Ntp"))) {
-        ret = Facility::Value::Ntp;
-    } else if (boost::iequals(src, std::string("LogAudit"))) {
-        ret = Facility::Value::LogAudit;
-    } else if (boost::iequals(src, std::string("LogAlert"))) {
-        ret = Facility::Value::LogAlert;
-    } else if (boost::iequals(src, std::string("Cron"))) {
-        ret = Facility::Value::Cron;
-    } else if (boost::iequals(src, std::string("Local0"))) {
-        ret = Facility::Value::Local0;
-    } else if (boost::iequals(src, std::string("Local1"))) {
-        ret = Facility::Value::Local1;
-    } else if (boost::iequals(src, std::string("Local2"))) {
-        ret = Facility::Value::Local2;
-    } else if (boost::iequals(src, std::string("Local3"))) {
-        ret = Facility::Value::Local3;
-    } else if (boost::iequals(src, std::string("Local4"))) {
-        ret = Facility::Value::Local4;
-    } else if (boost::iequals(src, std::string("Local5"))) {
-        ret = Facility::Value::Local5;
-    } else if (boost::iequals(src, std::string("Local6"))) {
-        ret = Facility::Value::Local6;
-    } else if (boost::iequals(src, std::string("Local7"))) {
-        ret = Facility::Value::Local7;
+const uint8_t Facility::readFromString(const std::string& src) {
+    const auto &value = _values.find(boost::algorithm::to_lower_copy(src));
+    if (value != _values.end()) {
+        return value->second;
     } else {
         throw "Illegal facility value: " + src;
-    };
-    return ret;
+    }
 }
 
 

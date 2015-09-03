@@ -23,6 +23,7 @@ SOFTWARE.
  */
 
 #include <boost/algorithm/string.hpp>
+#include <map>
 #include "Severity.h"
 
 const std::string Severity::readFromStream(std::istream& src) {
@@ -38,28 +39,13 @@ const std::string Severity::readFromStream(std::istream& src) {
     return ret;
 }
 
-const Severity::Value Severity::readFromString(const std::string& src) {
-    Severity::Value ret;
-    if (boost::iequals(src, std::string("Emergency"))) {
-        ret = Severity::Value::Emergency;
-    } else if (boost::iequals(src, std::string("Alert"))) {
-        ret = Severity::Value::Alert;
-    } else if (boost::iequals(src, std::string("Critical"))) {
-        ret = Severity::Value::Critical;
-    } else if (boost::iequals(src, std::string("Error"))) {
-        ret = Severity::Value::Error;
-    } else if (boost::iequals(src, std::string("Warning"))) {
-        ret = Severity::Value::Warning;
-    } else if (boost::iequals(src, std::string("Notice"))) {
-        ret = Severity::Value::Notice;
-    } else if (boost::iequals(src, std::string("Informational"))) {
-        ret = Severity::Value::Informational;
-    } else if (boost::iequals(src, std::string("Debug"))) {
-        ret = Severity::Value::Debug;
+const uint8_t Severity::readFromString(const std::string& src) {
+    const auto &value = _values.find(boost::algorithm::to_lower_copy(src));
+    if (value != _values.end()) {
+        return value->second;
     } else {
-        throw "Illegal severity value: " + src;
-    };
-    return ret;
+        throw "illegal severity: " + src;
+    }
 }
 
 
