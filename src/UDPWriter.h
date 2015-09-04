@@ -37,8 +37,6 @@ public:
     virtual void sendMessage(std::shared_ptr<SyslogMessage>);
 
 private:
-    const std::string& _destination;
-    const int _port;
     boost::asio::io_service _ios;
     boost::asio::ip::udp::socket _socket{_ios};
 };

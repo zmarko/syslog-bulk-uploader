@@ -28,9 +28,9 @@ SOFTWARE.
 
 using namespace boost::asio::ip;
 
-UDPWriter::UDPWriter(const std::string& destination, const int port) : _destination(destination), _port(port) {
+UDPWriter::UDPWriter(const std::string& destination, const int port) {
     udp::resolver resolver(_ios);
-    udp::resolver::query query(_destination, std::to_string(_port));
+    udp::resolver::query query(destination, std::to_string(port));
     udp::resolver::iterator it = resolver.resolve(query);
     if (it != udp::resolver::iterator()) {
         auto endpoint = *it;

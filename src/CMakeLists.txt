@@ -9,7 +9,6 @@ add_library(slbu-lib
     Severity.cpp
     SyslogMessage.cpp
     UDPWriter.cpp
-    RFC3164FormattedSyslogMessage
 )
 
 add_executable(syslog-bulk-uploader main.cpp)
