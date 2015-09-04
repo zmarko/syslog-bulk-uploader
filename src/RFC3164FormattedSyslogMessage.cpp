@@ -22,17 +22,23 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 
+#include <boost/date_time.hpp>
+#include "RFC3164FormattedSyslogMessage.h"
 
-#ifndef WRITER_H
-#define	WRITER_H
+using namespace boost::posix_time;
+using namespace std;
 
-#include <boost/noncopyable.hpp>
-#include "SyslogMessage.h"
+static time_facet* f = new time_facet("%b %e %H:%M:%S");
+static stringstream ss;
 
-class Writer : private boost::noncopyable {
-public:
-    virtual void sendMessage(std::shared_ptr<SyslogMessage>) = 0;
-};
+std::string RFC3164FormattedSyslogMessage::operator()() {
+    ss.str("");
+    ss.imbue(locale(locale::classic(), f));
 
-#endif	/* WRITER_H */
+    ss << "<" << to_string(_message.priority()) << ">";
+    ss << _message.timestamp() << " ";
+    ss << _message.source() << " ";
+    ss << _message.message();
 
+    return ss.str();
+}

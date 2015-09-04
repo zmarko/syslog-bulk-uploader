@@ -22,17 +22,17 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 
+#define BOOST_TEST_MODULE RFC3164FormattedSyslogMessageTests
+#include <boost/test/unit_test.hpp>
+#include "../src/SyslogMessage.h"
+#include "../src/RFC3164FormattedSyslogMessage.h"
 
-#ifndef WRITER_H
-#define	WRITER_H
+using namespace std;
 
-#include <boost/noncopyable.hpp>
-#include "SyslogMessage.h"
-
-class Writer : private boost::noncopyable {
-public:
-    virtual void sendMessage(std::shared_ptr<SyslogMessage>) = 0;
-};
-
-#endif	/* WRITER_H */
-
+BOOST_AUTO_TEST_CASE(format) {
+    stringstream ss("2015-09-02 13:33:11     Local4.Critical 192.168.0.1     test message");
+    SyslogMessage m(ss);
+    RFC3164FormattedSyslogMessage f(m);
+    string s = f();
+    BOOST_CHECK_EQUAL(s, "<162>Sep  2 13:33:11 192.168.0.1 test message");
+}

@@ -22,17 +22,26 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 
+#ifndef UDPWRITER_H
+#define	UDPWRITER_H
 
-#ifndef WRITER_H
-#define	WRITER_H
+#include <memory>
+#include <boost/asio.hpp>
+#include "Writer.h"
 
-#include <boost/noncopyable.hpp>
-#include "SyslogMessage.h"
-
-class Writer : private boost::noncopyable {
+class UDPWriter : public Writer {
 public:
-    virtual void sendMessage(std::shared_ptr<SyslogMessage>) = 0;
+
+    UDPWriter(const std::string&, const int);
+
+    virtual void sendMessage(std::shared_ptr<SyslogMessage>);
+
+private:
+    const std::string& _destination;
+    const int _port;
+    boost::asio::io_service _ios;
+    boost::asio::ip::udp::socket _socket{_ios};
 };
 
-#endif	/* WRITER_H */
+#endif	/* UDPWRITER_H */
 

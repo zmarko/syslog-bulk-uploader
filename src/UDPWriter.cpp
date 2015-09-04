@@ -22,17 +22,28 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 
+#include <string>
+#include "UDPWriter.h"
+#include "RFC3164FormattedSyslogMessage.h"
 
-#ifndef WRITER_H
-#define	WRITER_H
+using namespace boost::asio::ip;
 
-#include <boost/noncopyable.hpp>
-#include "SyslogMessage.h"
-
-class Writer : private boost::noncopyable {
-public:
-    virtual void sendMessage(std::shared_ptr<SyslogMessage>) = 0;
+UDPWriter::UDPWriter(const std::string& destination, const int port) : _destination(destination), _port(port) {
+    udp::resolver resolver(_ios);
+    udp::resolver::query query(_destination, std::to_string(_port));
+    udp::resolver::iterator it = resolver.resolve(query);
+    if (it != udp::resolver::iterator()) {
+        auto endpoint = *it;
+        _socket.connect(endpoint);
+    } else {
+        throw "Destination not found: " + destination;
+    }
 };
 
-#endif	/* WRITER_H */
-
+void UDPWriter::sendMessage(std::shared_ptr<SyslogMessage> message) {
+    if (_socket.is_open()) {
+        auto formatted = RFC3164FormattedSyslogMessage{*message};
+        auto buff = ::boost::asio::buffer(formatted());
+        _socket.send(buff);
+    }
+}

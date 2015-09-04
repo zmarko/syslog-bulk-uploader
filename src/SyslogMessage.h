@@ -64,6 +64,10 @@ public:
         return _timestamp;
     }
 
+    const uint8_t priority() const {
+        return (_facility.as_int() * 8) +_severity.as_int();
+    };
+
     friend std::ostream& operator<<(std::ostream& os, const SyslogMessage& obj) {
         os << "SyslogMessage{timestamp:" << obj._timestamp << ", facility:" << obj._facility <<
                 ", severity:" << obj._severity << ",source:" << obj._source << ",message:" << obj._message << "}";

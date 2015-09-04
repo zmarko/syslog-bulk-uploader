@@ -40,6 +40,9 @@ public:
     Severity(const Severity& orig) : _value(orig._value) {
     };
 
+    virtual ~Severity() {
+    };
+
     bool operator!=(const Severity& right) const {
         bool result = !(*this == right); // Reuse equals operator
         return result;
@@ -49,12 +52,13 @@ public:
         return _value == right._value;
     }
 
-    virtual ~Severity() {
-    };
-
     friend std::ostream& operator<<(std::ostream& os, const Severity& obj) {
         os << obj._value;
         return os;
+    }
+
+    uint8_t as_int() const {
+        return _value;
     }
 
 private:

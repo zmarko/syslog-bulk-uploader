@@ -42,6 +42,9 @@ public:
     Facility(const Facility & orig) : _value(orig._value) {
     };
 
+    virtual ~Facility() {
+    };
+
     bool operator!=(const Facility & right) const {
         bool result = !(*this == right); // Reuse equals operator
         return result;
@@ -56,8 +59,10 @@ public:
         return os;
     }
 
-    virtual ~Facility() {
-    };
+    uint8_t as_int() const {
+        return _value;
+    }
+
 private:
 
     const std::map<std::string, uint8_t> _values{

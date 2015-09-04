@@ -1,10 +1,11 @@
 cmake_minimum_required(VERSION 2.8)
 project(syslog-bulk-uploader)
-set(CMAKE_CXX_FLAGS "-g -Wall")
+set(CMAKE_CXX_FLAGS "-g -Wall -Werror")
 add_definitions(-std=c++11)
 add_subdirectory(src)
 add_subdirectory(test)
 enable_testing()
 add_test(NAME SyslogBulkUploaderTests COMMAND SyslogBulkUploaderTests)
 add_test(NAME SyslogMessageTests COMMAND SyslogMessageTests)
+add_test(NAME RFC3164FormattedSyslogMessageTests COMMAND RFC3164FormattedSyslogMessageTests)
 

@@ -87,3 +87,4 @@ const std::string SyslogMessage::readMessage(std::istream & src) {
     }
     return ret;
 };
+

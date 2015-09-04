@@ -22,17 +22,28 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 
+#ifndef RFC3164FORMATTEDSYSLOGMESSAGE_H
+#define	RFC3164FORMATTEDSYSLOGMESSAGE_H
 
-#ifndef WRITER_H
-#define	WRITER_H
-
-#include <boost/noncopyable.hpp>
 #include "SyslogMessage.h"
 
-class Writer : private boost::noncopyable {
+class RFC3164FormattedSyslogMessage {
 public:
-    virtual void sendMessage(std::shared_ptr<SyslogMessage>) = 0;
+
+    RFC3164FormattedSyslogMessage(const SyslogMessage& msg) : _message(msg) {
+    };
+
+    RFC3164FormattedSyslogMessage(const RFC3164FormattedSyslogMessage& orig) : _message(orig._message) {
+    };
+
+    virtual ~RFC3164FormattedSyslogMessage() {
+    };
+
+    std::string operator()();
+
+private:
+    const SyslogMessage& _message;
 };
 
-#endif	/* WRITER_H */
+#endif	/* RFC3164FORMATTEDSYSLOGMESSAGE_H */
 

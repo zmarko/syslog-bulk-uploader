@@ -19,3 +19,10 @@ target_link_libraries(SyslogMessageTests
         ${Boost_DATE_TIME_LIBRARY}
 )
 
+add_executable(RFC3164FormattedSyslogMessageTests RFC3164FormattedSyslogMessageTests.cpp)
+target_link_libraries(RFC3164FormattedSyslogMessageTests
+	slbu-lib
+	${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
+        ${Boost_DATE_TIME_LIBRARY}
+)
+
