@@ -29,7 +29,7 @@ SOFTWARE.
 const std::string Severity::readFromStream(std::istream& src) {
     std::string ret;
     while (src) {
-        std::istream::char_type c = src.get();
+        auto c = src.get();
         if (c == ' ' || c == '\t') {
             break;
         } else {

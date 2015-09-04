@@ -64,7 +64,7 @@ BOOST_AUTO_TEST_CASE(test_run) {
     SyslogBulkUploader ul(r, w);
     ul.run();
     BOOST_CHECK_EQUAL(w._messages.size(), 3);
-    for (size_t i = 0; i < w._messages.size(); i++) {
+    for (auto i = 0; i < w._messages.size(); i++) {
         std::cout << *(w._messages[i].get()) << std::endl;
     }
 }

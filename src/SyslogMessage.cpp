@@ -26,7 +26,7 @@ SOFTWARE.
 
 void skipWhitespace(std::istream& src) {
     while (src) {
-        std::istream::char_type c = src.peek();
+        auto c = src.peek();
         if (c == ' ' || c == '\t') {
             src.get();
             continue;
@@ -40,7 +40,7 @@ const boost::posix_time::ptime SyslogMessage::readTimestamp(std::istream& src) {
     int ws = 0;
     std::string ts;
     while (src) {
-        std::istream::char_type c = src.get();
+        auto c = src.get();
         if (c == ' ' || c == '\t') {
             ws++;
         }
@@ -66,7 +66,7 @@ const std::string SyslogMessage::readSource(std::istream& src) {
     std::string ret;
     skipWhitespace(src);
     while (src) {
-        std::istream::char_type c = src.get();
+        auto c = src.get();
         if (c == ' ' || c == '\t') {
             break;
         } else {
@@ -80,7 +80,7 @@ const std::string SyslogMessage::readMessage(std::istream & src) {
     std::string ret;
     skipWhitespace(src);
     while (src) {
-        std::istream::char_type c = src.get();
+        auto c = src.get();
         if (!src.eof()) {
             ret.push_back(c);
         }
