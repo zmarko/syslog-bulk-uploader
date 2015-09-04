@@ -42,6 +42,7 @@ public:
     std::string operator()();
 
 private:
+    static const size_t MAX_LEN = 1024;
     const SyslogMessage& _message;
 };
 

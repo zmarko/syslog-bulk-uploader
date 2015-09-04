@@ -28,11 +28,10 @@ SOFTWARE.
 using namespace boost::posix_time;
 using namespace std;
 
-static time_facet* f = new time_facet("%b %e %H:%M:%S");
-static stringstream ss;
+static const time_facet* f = new time_facet("%b %e %H:%M:%S");
 
 std::string RFC3164FormattedSyslogMessage::operator()() {
-    ss.str("");
+    stringstream ss;
     ss.imbue(locale(locale::classic(), f));
 
     ss << "<" << to_string(_message.priority()) << ">";
@@ -40,5 +39,9 @@ std::string RFC3164FormattedSyslogMessage::operator()() {
     ss << _message.source() << " ";
     ss << _message.message();
 
-    return ss.str();
+    string ret = ss.str();
+    if (ret.size() > MAX_LEN) {
+        ret = ret.substr(0, MAX_LEN);
+    }
+    return ret;
 }
