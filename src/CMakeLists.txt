@@ -4,9 +4,9 @@ include_directories(
 )
 
 add_library(slbu-lib 
-    SyslogBulkUploader.cpp
     Facility.cpp
     Severity.cpp
+    SyslogBulkUploader.cpp
     SyslogMessage.cpp
     UDPWriter.cpp
 )
