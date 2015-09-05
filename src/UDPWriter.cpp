@@ -43,8 +43,9 @@ UDPWriter::UDPWriter(const std::string& destination, const int port) {
 
 void UDPWriter::sendMessage(std::shared_ptr<const SyslogMessage> message) {
     if (_socket.is_open()) {
-        auto formatted = RFC3164FormattedSyslogMessage{*message};
-        auto buff = buffer(formatted());
+        auto fmtMsg = RFC3164FormattedSyslogMessage{*message};
+        auto fmtStr = fmtMsg();
+        auto buff = buffer(fmtStr);
         _socket.send(buff);
     }
 }
