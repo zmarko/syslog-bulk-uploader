@@ -41,7 +41,7 @@ public:
     virtual ~RFC3164FormattedSyslogMessage() {
     };
 
-    std::string operator()() {
+    const std::string operator()() {
         _stream.str("");
         _stream << "<" << std::to_string(_message.priority()) << ">";
         _stream << _message.timestamp() << " ";

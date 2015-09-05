@@ -76,15 +76,14 @@ const std::string SyslogMessage::readSource(std::istream& src) {
     return ret;
 };
 
-const std::string SyslogMessage::readMessage(std::istream & src) {
+const std::string SyslogMessage::readMessage(std::istream& src) {
     std::string ret;
     skipWhitespace(src);
-    while (src) {
-        auto c = src.get();
-        if (!src.eof()) {
-            ret.push_back(c);
-        }
-    }
+    std::getline(src, ret);
     return ret;
+};
+
+const uint8_t operator+(const Facility& f, const Severity& s) {
+    return f._value * 8 + s._value;
 };
 

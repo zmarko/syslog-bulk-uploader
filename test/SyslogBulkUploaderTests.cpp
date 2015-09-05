@@ -25,14 +25,21 @@ SOFTWARE.
 #include "../src/SyslogBulkUploader.h"
 #include "../src/Reader.h"
 #include "../src/Writer.h"
+#include "../src/FileReader.h"
+#include "../src/UDPWriter.h"
+#include "UdpSyslogServer.h"
+#include "../src/RFC3164FormattedSyslogMessage.h"
 #define BOOST_TEST_MODULE SyslogBulkUploaderTests
 #include <boost/test/unit_test.hpp>
 #include <memory>
+#define BOOST_FILESYSTEM_NO_DEPRECATED
+#include <boost/filesystem.hpp>
+#include <boost/date_time/posix_time/posix_time.hpp>
 
 class MockReader : public Reader {
 public:
 
-    virtual std::shared_ptr<SyslogMessage> nextMessage() {
+    virtual std::shared_ptr<const SyslogMessage> nextMessage() {
         if (_pos >= _messages.size()) {
             return std::shared_ptr<SyslogMessage>();
         } else {
@@ -52,10 +59,11 @@ private:
 class MockWriter : public Writer {
 public:
 
-    virtual void sendMessage(std::shared_ptr<SyslogMessage> msg) {
+    virtual void sendMessage(std::shared_ptr<const SyslogMessage> msg) {
         _messages.push_back(msg);
+        std::cout << *msg << std::endl;
     };
-    std::vector<std::shared_ptr<SyslogMessage>> _messages;
+    std::vector<std::shared_ptr<const SyslogMessage>> _messages;
 };
 
 BOOST_AUTO_TEST_CASE(test_run) {
@@ -64,7 +72,40 @@ BOOST_AUTO_TEST_CASE(test_run) {
     SyslogBulkUploader ul(r, w);
     ul.run();
     BOOST_CHECK_EQUAL(w._messages.size(), 3);
-    for (auto i = 0; i < w._messages.size(); i++) {
-        std::cout << *(w._messages[i].get()) << std::endl;
+}
+
+BOOST_AUTO_TEST_CASE(test_file_reader) {
+    std::cout << "Running in " << boost::filesystem::initial_path() << std::endl;
+    FileReader r("../test/sample1");
+    MockWriter w;
+    SyslogBulkUploader ul(r, w);
+    ul.run();
+    BOOST_CHECK_EQUAL(w._messages.size(), 3);
+}
+
+BOOST_AUTO_TEST_CASE(test_udp_writer) {
+    using namespace boost::posix_time;
+
+    ptime start(second_clock::local_time());
+    boost::asio::io_service ios;
+    FileReader r("../test/sample1");
+    UDPWriter w("localhost", 51514);
+    SyslogBulkUploader ul(r, w);
+    UdpSyslogServer server(ios, 51514, 2000);
+    ul.run();
+
+    while (second_clock::local_time() - start < seconds(2)) {
+        ios.run_one();
     }
+
+    BOOST_CHECK_EQUAL(server.messages().size(), 3);
+
+    auto it = server.messages().begin();
+    FileReader r2("../test/sample1");
+    while (auto msg = r2.nextMessage()) {
+        RFC3164FormattedSyslogMessage fmt(*msg);
+        BOOST_CHECK_EQUAL(*it, fmt());
+        it++;
+    }
+
 }

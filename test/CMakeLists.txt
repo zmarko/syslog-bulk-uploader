@@ -1,4 +1,5 @@
-find_package(Boost COMPONENTS unit_test_framework date_time REQUIRED)
+find_package(Boost COMPONENTS unit_test_framework date_time filesystem system REQUIRED)
+find_package(Threads)
 include_directories(
     ${TEST_SOURCE_DIR/src}
     ${Boost_INLUDE_DIRS}
@@ -10,6 +11,9 @@ target_link_libraries(SyslogBulkUploaderTests
 	slbu-lib
 	${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
         ${Boost_DATE_TIME_LIBRARY}
+        ${Boost_FILESYSTEM_LIBRARY}
+        ${Boost_SYSTEM_LIBRARY}
+        ${CMAKE_THREAD_LIBS_INIT}
 )
 
 add_executable(SyslogMessageTests SyslogMessageTests.cpp)

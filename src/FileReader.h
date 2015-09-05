@@ -22,17 +22,33 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 
+#ifndef FILEREADER_H
+#define	FILEREADER_H
 
-#ifndef WRITER_H
-#define	WRITER_H
+#include <fstream>
+#include "Reader.h"
 
-#include <boost/noncopyable.hpp>
-#include "SyslogMessage.h"
-
-class Writer : private boost::noncopyable {
+class FileReader : public Reader {
 public:
-    virtual void sendMessage(std::shared_ptr<const SyslogMessage>) = 0;
+
+    FileReader(const std::string filename) : _stream(std::ifstream(filename)) {
+        if (!_stream.is_open()) {
+            throw "File not found: " + filename;
+        }
+    }
+
+    virtual std::shared_ptr<const SyslogMessage> nextMessage() {
+        std::shared_ptr<const SyslogMessage> ret;
+        if (_stream.is_open() && !_stream.eof() && !_stream.fail()) {
+            ret.reset(new SyslogMessage(_stream));
+            for (auto c = _stream.peek(); c == '\n' || c == '\r'; _stream.get(), c = _stream.peek());
+        }
+        return ret;
+    }
+
+private:
+    std::ifstream _stream;
 };
 
-#endif	/* WRITER_H */
+#endif	/* FILEREADER_H */
 

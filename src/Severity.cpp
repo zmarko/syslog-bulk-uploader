@@ -40,8 +40,8 @@ const std::string Severity::readFromStream(std::istream& src) {
 }
 
 const uint8_t Severity::readFromString(const std::string& src) {
-    const auto &value = _values.find(boost::algorithm::to_lower_copy(src));
-    if (value != _values.end()) {
+    const auto &value = VALUES.find(boost::algorithm::to_lower_copy(src));
+    if (value != VALUES.end()) {
         return value->second;
     } else {
         throw "illegal severity: " + src;

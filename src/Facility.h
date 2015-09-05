@@ -27,6 +27,8 @@ SOFTWARE.
 
 #include <istream>
 
+class Severity;
+
 class Facility {
 public:
 
@@ -39,33 +41,31 @@ public:
     Facility(std::istream& source) : Facility(readFromStream(source)) {
     };
 
-    Facility(const Facility & orig) : _value(orig._value) {
+    Facility(const Facility& orig) : _value(orig._value) {
     };
 
     virtual ~Facility() {
     };
 
-    bool operator!=(const Facility & right) const {
+    bool operator!=(const Facility& right) const {
         bool result = !(*this == right); // Reuse equals operator
         return result;
     }
 
-    bool operator==(const Facility & right) const {
+    bool operator==(const Facility& right) const {
         return _value == right._value;
     }
 
     friend std::ostream& operator<<(std::ostream& os, const Facility& obj) {
-        os << obj._value;
+        os << std::to_string(obj._value);
         return os;
     }
 
-    uint8_t as_int() const {
-        return _value;
-    }
+    friend const uint8_t operator+(const Facility& f, const Severity& s);
 
 private:
 
-    const std::map<std::string, uint8_t> _values{
+    const std::map<std::string, uint8_t> VALUES{
         {"kern", 0},
         {"user", 1},
         {"mail", 2},

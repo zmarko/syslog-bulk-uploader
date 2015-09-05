@@ -25,6 +25,8 @@ SOFTWARE.
 #ifndef SEVERITY_H
 #define	SEVERITY_H
 
+class Facility;
+
 class Severity {
 public:
 
@@ -52,18 +54,16 @@ public:
         return _value == right._value;
     }
 
-    friend std::ostream& operator<<(std::ostream& os, const Severity& obj) {
-        os << obj._value;
-        return os;
-    }
+    friend const uint8_t operator+(const Facility& f, const Severity& s);
 
-    uint8_t as_int() const {
-        return _value;
+    friend std::ostream& operator<<(std::ostream& os, const Severity& obj) {
+        os << std::to_string(obj._value);
+        return os;
     }
 
 private:
 
-    const std::map<std::string, uint8_t> _values{
+    const std::map<std::string, uint8_t> VALUES{
         {"emergency", 0},
         {"alert", 1},
         {"critical", 2},

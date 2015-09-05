@@ -34,7 +34,7 @@ public:
 
     UDPWriter(const std::string&, const int);
 
-    virtual void sendMessage(std::shared_ptr<SyslogMessage>);
+    virtual void sendMessage(std::shared_ptr<const SyslogMessage>);
 
 private:
     boost::asio::io_service _ios;

@@ -26,7 +26,8 @@ SOFTWARE.
 #include "UDPWriter.h"
 #include "RFC3164FormattedSyslogMessage.h"
 
-using namespace boost::asio::ip;
+using boost::asio::ip::udp;
+using namespace boost::asio;
 
 UDPWriter::UDPWriter(const std::string& destination, const int port) {
     udp::resolver resolver(_ios);
@@ -40,10 +41,10 @@ UDPWriter::UDPWriter(const std::string& destination, const int port) {
     }
 };
 
-void UDPWriter::sendMessage(std::shared_ptr<SyslogMessage> message) {
+void UDPWriter::sendMessage(std::shared_ptr<const SyslogMessage> message) {
     if (_socket.is_open()) {
         auto formatted = RFC3164FormattedSyslogMessage{*message};
-        auto buff = ::boost::asio::buffer(formatted());
+        auto buff = buffer(formatted());
         _socket.send(buff);
     }
 }

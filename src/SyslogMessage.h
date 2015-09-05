@@ -65,7 +65,7 @@ public:
     }
 
     const uint8_t priority() const {
-        return (_facility.as_int() * 8) +_severity.as_int();
+        return _facility + _severity;
     };
 
     friend std::ostream& operator<<(std::ostream& os, const SyslogMessage& obj) {
