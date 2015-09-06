@@ -8,4 +8,5 @@ enable_testing()
 add_test(NAME SyslogBulkUploaderTests COMMAND SyslogBulkUploaderTests)
 add_test(NAME SyslogMessageTests COMMAND SyslogMessageTests)
 add_test(NAME RFC3164FormattedSyslogMessageTests COMMAND RFC3164FormattedSyslogMessageTests)
+add_test(NAME FrequencyLimitTests COMMAND FrequencyLimitTests)
 

@@ -1,4 +1,4 @@
-find_package(Boost COMPONENTS unit_test_framework date_time filesystem system REQUIRED)
+find_package(Boost COMPONENTS unit_test_framework date_time filesystem system thread REQUIRED)
 find_package(Threads)
 include_directories(
     ${TEST_SOURCE_DIR/src}
@@ -28,5 +28,13 @@ target_link_libraries(RFC3164FormattedSyslogMessageTests
 	slbu-lib
 	${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
         ${Boost_DATE_TIME_LIBRARY}
+)
+
+add_executable(FrequencyLimitTests FrequencyLimitTests.cpp)
+target_link_libraries(FrequencyLimitTests
+	slbu-lib
+	${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
+        ${Boost_DATE_TIME_LIBRARY}
+        ${Boost_THREAD_LIBRARY}
 )
 
