@@ -32,7 +32,8 @@ SOFTWARE.
 class FrequencyLimit {
 public:
 
-    FrequencyLimit(const size_t& limit) : _target(boost::posix_time::microseconds(1000000 / limit)), _delay(boost::posix_time::milliseconds(0)) {
+    FrequencyLimit(const size_t& limit) : _target(boost::posix_time::microseconds(1000000 / limit)),
+    _delay(boost::posix_time::milliseconds(0)) {
     };
 
     void tick() {
@@ -40,15 +41,12 @@ public:
         if (_prev == boost::posix_time::not_a_date_time) {
             _prev = now;
         } else {
-            auto dur = now - _prev;
-            auto diff = _target - dur;
-//            _delay = (_delay + diff) / 2;
+            auto latency = now - _prev;
+            auto diff = _target - latency;
             _delay = _delay + diff;
-//            std::cout << "dur: " << dur << " diff: " << diff << " _delay: " << _delay << std::endl;
             if (diff > boost::posix_time::microseconds(0)) {
                 boost::this_thread::sleep(_delay);
             }
-//            _prev = boost::posix_time::microsec_clock::local_time();
             _prev = now;
         }
     };
