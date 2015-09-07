@@ -10,3 +10,11 @@ add_test(NAME SyslogMessageTests COMMAND SyslogMessageTests)
 add_test(NAME RFC3164FormattedSyslogMessageTests COMMAND RFC3164FormattedSyslogMessageTests)
 add_test(NAME FrequencyLimitTests COMMAND FrequencyLimitTests)
 
+set(VER_NAME "Syslog Bulk Uploader")
+set(VER_MAJOR 1)
+set(VER_MINOR 0)
+set(VER_PATCH 0)
+set(VER_PRERELEASE "alpha.1")
+set(VER_BUILD "")
+
+configure_file("src/config.h.in" "src/config.h")

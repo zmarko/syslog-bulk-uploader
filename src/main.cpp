@@ -23,8 +23,10 @@ SOFTWARE.
  */
 
 #include <iostream>
+#include <string>
 #include <boost/program_options.hpp>
 
+#include "src/config.h"
 #include "SyslogBulkUploader.h"
 #include "FileReader.h"
 #include "UDPWriter.h"
@@ -36,6 +38,30 @@ size_t mps;
 string dest;
 uint16_t port;
 vector<string> files;
+
+string version() {
+    stringstream ss;
+    ss << VER_NAME << " version " << VER_MAJOR << ".";
+#ifdef VER_MINOR
+    ss << VER_MINOR;
+#else
+    ss << "0";
+#endif
+    ss << ".";
+#ifdef VER_PATCH
+    ss << VER_PATCH;
+#else
+    ss << "0";
+#endif
+#ifdef VER_PRERELEASE
+    ss << "-" << VER_PRERELEASE;
+#endif
+#ifdef VER_BUILD
+    ss << "+" << VER_BUILD;
+#endif
+
+    return ss.str();
+}
 
 int main(int argc, char** argv) {
     po::options_description desc("Supported options");
@@ -65,7 +91,7 @@ int main(int argc, char** argv) {
     }
 
     if (vars.count("version")) {
-        cout << "VERSION" << std::endl;
+        cout << version() << std::endl;
         return 0;
     }
 

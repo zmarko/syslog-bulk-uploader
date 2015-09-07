@@ -1,6 +1,8 @@
 find_package(Boost COMPONENTS date_time filesystem system thread program_options REQUIRED)
 find_package(Threads)
+
 include_directories(
+    ${PROJECT_BINARY_DIR}
     ${Boost_INLUDE_DIRS}
 )
 
