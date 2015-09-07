@@ -114,7 +114,7 @@ int main(int argc, char** argv) {
             FileReader r(file);
             SyslogBulkUploader uploader(r, w, mps);
             cout << "Sending logs from " << file << " to udp://" << dest << ":" << port << " at a max rate of " <<
-                    mps << " messages per second ... ";
+                    mps << " messages per second ... " << flush;
             uploader.run();
             cout << "done" << endl;
         } catch (string& ex) {
