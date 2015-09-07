@@ -34,6 +34,7 @@ SOFTWARE.
 namespace po = boost::program_options;
 using namespace std;
 
+po::options_description desc("Supported options");
 size_t mps;
 string dest;
 uint16_t port;
@@ -41,34 +42,19 @@ vector<string> files;
 
 string version() {
     stringstream ss;
-    ss << VER_NAME << " version " << VER_MAJOR << ".";
-#ifdef VER_MINOR
-    ss << VER_MINOR;
-#else
-    ss << "0";
-#endif
-    ss << ".";
-#ifdef VER_PATCH
-    ss << VER_PATCH;
-#else
-    ss << "0";
-#endif
-#ifdef VER_PRERELEASE
-    ss << "-" << VER_PRERELEASE;
-#endif
-#ifdef VER_BUILD
-    ss << "+" << VER_BUILD;
-#endif
-
+    ss << SLBU_DESC << " version " << SLBU_VER;
     return ss.str();
 }
 
+void help() {
+    desc.print(cout);
+}
+
 int main(int argc, char** argv) {
-    po::options_description desc("Supported options");
     desc.add_options()
             ("help,h", "display help message")
             ("version,v", "display version information")
-            ("mps,m", po::value<size_t>(&mps)->default_value(1000), "try to maintain this rate of messages-per-second")
+            ("mps,m", po::value<size_t>(&mps)->default_value(1000), "send messages at specified rate per second")
             ("dest,d", po::value<string>(&dest), "destination host name")
             ("port,p", po::value<uint16_t>(&port)->default_value(514), "destination port")
             ("files,f", po::value<vector < string >> (&files), "input file(s)")
@@ -86,7 +72,7 @@ int main(int argc, char** argv) {
     po::notify(vars);
 
     if (vars.count("help")) {
-        desc.print(std::cout);
+        help();
         return 0;
     }
 
@@ -97,13 +83,13 @@ int main(int argc, char** argv) {
 
     if (!vars.count("dest")) {
         cout << "ERROR: You must specify destination hostname" << endl;
-        desc.print(cout);
+        help();
         return -1;
     }
 
     if (!vars.count("files")) {
         cout << "ERROR: You must specify at least one input file" << endl;
-        desc.print(cout);
+        help();
         return -1;
     }
 
