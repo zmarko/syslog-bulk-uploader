@@ -1,0 +1,7 @@
+#cmakedefine VER_NAME "${VER_NAME}"
+#cmakedefine VER_MAJOR "${VER_MAJOR}"
+#cmakedefine VER_MINOR "${VER_MINOR}"
+#cmakedefine VER_PATCH "${VER_PATCH}"
+#cmakedefine VER_PRERELEASE "${VER_PRERELEASE}"
+#cmakedefine VER_BUILD "${VER_BUILD}"
+
