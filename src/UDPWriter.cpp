@@ -29,7 +29,7 @@ SOFTWARE.
 using boost::asio::ip::udp;
 using namespace boost::asio;
 
-UDPWriter::UDPWriter(const std::string& destination, const int port) {
+UDPWriter::UDPWriter(const std::string& destination, const uint16_t port) {
     udp::resolver resolver(_ios);
     udp::resolver::query query(destination, std::to_string(port));
     udp::resolver::iterator it = resolver.resolve(query);

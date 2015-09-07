@@ -33,13 +33,16 @@ class Writer;
 class SyslogBulkUploader : boost::noncopyable {
 public:
 
-    SyslogBulkUploader(Reader& reader, Writer& writer) : _reader(reader), _writer(writer) {
+    SyslogBulkUploader(Reader& reader, Writer& writer, const size_t& mps = DEFAULT_MPS) : _reader(reader),
+    _writer(writer), _mps(mps) {
     };
     void run();
 
 private:
+    const static size_t DEFAULT_MPS = 1000;
     Reader& _reader;
     Writer& _writer;
+    const size_t _mps;
 };
 
 #endif	/* SYSLOGBULKUPLOADER_H */

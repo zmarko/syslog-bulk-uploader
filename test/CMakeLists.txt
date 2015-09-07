@@ -14,6 +14,7 @@ target_link_libraries(SyslogBulkUploaderTests
         ${Boost_FILESYSTEM_LIBRARY}
         ${Boost_SYSTEM_LIBRARY}
         ${CMAKE_THREAD_LIBS_INIT}
+        ${Boost_THREAD_LIBRARY}
 )
 
 add_executable(SyslogMessageTests SyslogMessageTests.cpp)
@@ -36,5 +37,6 @@ target_link_libraries(FrequencyLimitTests
 	${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
         ${Boost_DATE_TIME_LIBRARY}
         ${Boost_THREAD_LIBRARY}
+        ${Boost_SYSTEM_LIBRARY}
 )
 

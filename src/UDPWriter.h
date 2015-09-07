@@ -32,7 +32,7 @@ SOFTWARE.
 class UDPWriter : public Writer {
 public:
 
-    UDPWriter(const std::string&, const int);
+    UDPWriter(const std::string&, const uint16_t);
 
     virtual void sendMessage(std::shared_ptr<const SyslogMessage>);
 

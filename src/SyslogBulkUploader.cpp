@@ -25,9 +25,15 @@ SOFTWARE.
 #include "SyslogBulkUploader.h"
 #include "Reader.h"
 #include "Writer.h"
+#include "FrequencyLimit.h"
+
+const size_t SyslogBulkUploader::DEFAULT_MPS;
 
 void SyslogBulkUploader::run() {
+    FrequencyLimit freqLimit(_mps);
+
     while (auto msg = _reader.nextMessage()) {
+        freqLimit.tick();
         _writer.sendMessage(msg);
     }
 }

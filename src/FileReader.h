@@ -27,11 +27,12 @@ SOFTWARE.
 
 #include <fstream>
 #include "Reader.h"
+#include "SyslogMessage.h"
 
 class FileReader : public Reader {
 public:
 
-    FileReader(const std::string filename) : _stream(std::ifstream(filename)) {
+    FileReader(const std::string& filename) : _stream(filename) {
         if (!_stream.is_open()) {
             throw "File not found: " + filename;
         }
