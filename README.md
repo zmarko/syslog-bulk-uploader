@@ -73,5 +73,5 @@ Not available yet. Check back soon.
 
 ### Installers
 During the build it is also possible to build installer packages. Supported installers at this time are:
-**rpm**, **deb** and plain **.tar.gz** archive. Installers are built by simly running `make package` in `build`
+**rpm**, **deb** and plain **.tar.gz** archive. Installers are built by simply running `make package` in `build`
 sub-directory.
