@@ -12,9 +12,9 @@ Fields of the syslog record are:
     <dt><strong>timestamp</strong></dt>
     <dd>in format YYYY-MM-DD HH:MM:SS</dd>
     <dt><strong>facility</strong></dt>
-    <dd>one of syslog facility strings: *kern, user, mail, daemon, auth, syslog, lpr, news, uucp, clock, authpriv, ftp, ntp, logaudit, logalert, cron, local0, local1, local2, local3, local4, local5, local6, local7*</dd>
+    <dd>one of syslog facility strings: kern, user, mail, daemon, auth, syslog, lpr, news, uucp, clock, authpriv, ftp, ntp, logaudit, logalert, cron, local0, local1, local2, local3, local4, local5, local6, local7</dd>
     <dt><strong>severity</strong></dt>
-    <dd>one of syslog severity strings: *emergency, alert, critical, error, warning, notice, informational, debug*</dd>
+    <dd>one of syslog severity strings: emergency, alert, critical, error, warning, notice, informational, debug</dd>
     <dt><strong>source</strong></dt>
     <dd>IP address or host name of message source</dd>
     <dt><strong>message</strong></dt>
