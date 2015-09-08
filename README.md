@@ -52,7 +52,7 @@ If more than one input file is specified on the command line, syslog-bulk-upload
 In order to build syslog-bulk-uploader from source, you will need to have a couple of dependencies pre-installed on your system:
 
 * [CMake](http://www.cmake.org) as the build system
-* Any recent C++ compiler supported by CMake on your platform (GCC, Clang, Visual C++, etc)
+* Any C++11 compiler supported by CMake on your platform (GCC, Clang, Visual C++, etc)
 * boost-date-time library
 * boost-filesystem library
 * boost-system library
@@ -60,13 +60,16 @@ In order to build syslog-bulk-uploader from source, you will need to have a coup
 * boost-program-options library
 * `a2x` executable (part of [AsciiDoc](http://www.methods.co.nz/asciidoc), required to build man page)
 
-### Building
-Once you have all the pre-requisites:
+### Building on Unix-like systems
 
     git clone git@github.com:zmarko/syslog-bulk-uploader.git
     cd syslog-bulk-uploader/build
     cmake ..
     make && make install
+
+### Building on Windows systems
+ 
+Not available yet. Check back soon.
 
 ### Installers
 During the build it is also possible to build installer packages. Supported installers at this time are:
