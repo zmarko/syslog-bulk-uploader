@@ -29,13 +29,13 @@ target_link_libraries(syslog-bulk-uploader
     slbu-lib
 )
 
-install(TARGETS syslog-bulk-uploader DESTINATION bin )
+install(TARGETS syslog-bulk-uploader DESTINATION bin)
 
 ##
 ## Installers configuration
 ##
 include(InstallRequiredSystemLibraries)
-set(CPACK_GENERATOR "RPM;DEB")
+set(CPACK_GENERATOR "RPM;DEB;TGZ")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "${VER_NAME}")
 set(CPACK_PACKAGE_VENDOR "Marko Zivanovic <marko@zivanovic.in.rs>")
 set(CPACK_PACKAGE_CONTACT "${CPACK_PACKAGE_VENDOR}")
@@ -46,4 +46,30 @@ set(CPACK_PACKAGE_VERSION "${SLBU_VER}")
 set(CPACK_SOURCE_STRIP_FILES TRUE)
 set(CPACK_STRIP_FILES TRUE)
 set(CPACK_RPM_PACKAGE_LICENSE "MIT")
+set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS TRUE)
+set(CPACK_DEBIAN_PACKAGE_SECTION "net")
+set(CPACK_DEBIAN_PACKAGE_HOMEPAGE "https://github.com/zmarko/syslog-bulk-uploader")
 include(CPack)
+
+##
+## Generate documentation
+##
+find_program(A2X_EXECUTABLE NAMES a2x)
+set(A2X_OPTS --doctype manpage --format manpage -D ${CMAKE_CURRENT_BINARY_DIR})
+
+set(MAN_NAMES syslog-bulk-uploader.1)
+set(MAN_FILES)
+foreach(m IN LISTS MAN_NAMES)
+    set(mf ${CMAKE_CURRENT_BINARY_DIR}/${m})
+    set(ms ${CMAKE_CURRENT_SOURCE_DIR}/${m}.txt)
+    add_custom_command(OUTPUT ${mf}
+        COMMAND ${A2X_EXECUTABLE} ${A2X_OPTS} ${ms}
+        DEPENDS ${ms}
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+        COMMENT "Building manpage ${mf}"
+        VERBATIM)
+    list(APPEND MAN_FILES ${mf})
+endforeach()
+
+add_custom_target(man ALL DEPENDS ${MAN_FILES})
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/syslog-bulk-uploader.1 DESTINATION man/man1/)

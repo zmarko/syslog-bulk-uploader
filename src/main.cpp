@@ -57,7 +57,7 @@ int main(int argc, char** argv) {
             ("mps,m", po::value<size_t>(&mps)->default_value(1000), "send messages at specified rate per second")
             ("dest,d", po::value<string>(&dest), "destination host name")
             ("port,p", po::value<uint16_t>(&port)->default_value(514), "destination port")
-            ("files,f", po::value<vector < string >> (&files), "input file(s)")
+            ("file,f", po::value<vector < string >> (&files), "input file(s)")
             ;
     po::positional_options_description pos;
     pos.add("files", -1);

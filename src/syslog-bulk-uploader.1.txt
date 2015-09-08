@@ -1,0 +1,71 @@
+SYSLOG-BULK-UPLOADER(1)
+=======================
+Marko Živanović <marko@zivanovic.in.rs>
+
+NAME
+----
+syslog-bulk-uploader - utility to send syslog records from file to remote syslog server
+
+SYNOPSIS
+--------
+syslog-bulk-uploader [option]... [file]...
+
+DESCRIPTION
+-----------
+syslog-bulk-uploader is non-interactive utility designed to read syslog records from one or more files and send them
+to remote syslog server. The format of syslog records in input files is:
+
+----
+<timestamp> <facility.severity> <source> <message>
+----
+
+Field separator is one or more space (ASCII 32) or tab (ASCII 9) characters. All whitespace characters in the _message_
+field will be interpreted as part of the message, not as separators.
+
+Fields of the record are:
+
+*timestamp*:: in format YYYY-MM-DD HH:MM:SS
+*facility*:: one of: kern,user,mail,daemon,auth,syslog,lpr,news,uucp,clock,authpriv,ftp,ntp,logaudit,logalert,cron,local0,local1,local2,local3,local4,local5,local6,local7
+*severity*:: one of: emergency,alert,critical,error,warning,notice,informational,debug
+*source*:: IP address or host name of message source
+*message*:: the text of the message itself
+
+OPTIONS
+-------
+*-h --help*:: display help message, then exit
+*v --version*:: display version information, then exit
+*-m --mps* num:: send messages at specified rate per second; default, if not specified, is 1000
+*-d --dest* dest:: destination host name
+*-p --port* arg:: destination port; default, if not specified, is 514
+*[-f --files]* filename:: one or more input files; option name (-f or --file) is optional, i.e. all non-named arguments will be interpreted as filenames
+
+SEE ALSO
+--------
+Project home page with source code, documentation, etc is at https://github.com/zmarko/syslog-bulk-uploader.
+
+BUGS
+----
+The up-to-date list of current and historical issues is located at https://github.com/zmarko/syslog-bulk-uploader/issues.
+
+COPYRIGHT
+---------
+Copyright (c) 2015 Marko Živanović.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
