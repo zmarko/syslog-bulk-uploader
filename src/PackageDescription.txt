@@ -1,0 +1,1 @@
+Syslog-bulk-uploader is non-interactive utility designed to read syslog records from one or more files and send them to remote syslog server.
