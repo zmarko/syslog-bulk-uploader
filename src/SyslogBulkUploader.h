@@ -26,23 +26,38 @@ SOFTWARE.
 #define	SYSLOGBULKUPLOADER_H
 
 #include <boost/noncopyable.hpp>
+#include <functional>
+#include <memory>
 
 class Reader;
 class Writer;
+class SyslogMessage;
 
 class SyslogBulkUploader : boost::noncopyable {
 public:
+
+    typedef std::function<void(std::shared_ptr<const SyslogMessage>)> Callback;
 
     SyslogBulkUploader(Reader& reader, Writer& writer, const size_t& mps = DEFAULT_MPS) : _reader(reader),
     _writer(writer), _mps(mps) {
     };
     void run();
 
+    void setPreSendCallback(Callback cb) {
+        _preSendCallback = cb;
+    }
+
+    void setPostSendCallback(Callback cb) {
+        _postSendCallback = cb;
+    }
+
 private:
     const static size_t DEFAULT_MPS = 1000;
     Reader& _reader;
     Writer& _writer;
     const size_t _mps;
+    Callback _preSendCallback;
+    Callback _postSendCallback;
 };
 
 #endif	/* SYSLOGBULKUPLOADER_H */

@@ -33,12 +33,16 @@ SOFTWARE.
 
 namespace po = boost::program_options;
 using namespace std;
+using namespace boost::posix_time;
 
 po::options_description desc("Supported options");
 size_t mps;
 string dest;
 uint16_t port;
 vector<string> files;
+ptime start;
+ptime lastPrint;
+time_duration printInterval = seconds(1);
 
 string version() {
     stringstream ss;
@@ -48,6 +52,14 @@ string version() {
 
 void help() {
     desc.print(cout);
+}
+
+void preSendCallback(shared_ptr<const SyslogMessage>) {
+    ptime now = second_clock::local_time();
+    if (now - lastPrint > printInterval) {
+        cout << "." << flush;
+        lastPrint = now;
+    }
 }
 
 int main(int argc, char** argv) {
@@ -60,7 +72,7 @@ int main(int argc, char** argv) {
             ("file,f", po::value<vector < string >> (&files), "input file(s)")
             ;
     po::positional_options_description pos;
-    pos.add("files", -1);
+    pos.add("file", -1);
     po::variables_map vars;
 
     try {
@@ -87,7 +99,7 @@ int main(int argc, char** argv) {
         return -1;
     }
 
-    if (!vars.count("files")) {
+    if (!vars.count("file")) {
         cout << "ERROR: You must specify at least one input file" << endl;
         help();
         return -1;
@@ -95,14 +107,16 @@ int main(int argc, char** argv) {
 
     UDPWriter w(dest, port);
 
+    lastPrint = start = second_clock::local_time();
     for (auto& file : files) {
         try {
             FileReader r(file);
             SyslogBulkUploader uploader(r, w, mps);
+            uploader.setPostSendCallback(bind(preSendCallback, placeholders::_1));
             cout << "Sending logs from " << file << " to udp://" << dest << ":" << port << " at a max rate of " <<
-                    mps << " messages per second ... " << flush;
+                    mps << " messages per second " << flush;
             uploader.run();
-            cout << "done" << endl;
+            cout << " - DONE" << endl;
         } catch (string& ex) {
             cout << ex << endl;
         } catch (exception& ex) {
