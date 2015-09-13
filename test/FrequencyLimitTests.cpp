@@ -42,10 +42,10 @@ size_t countInLoop(size_t freq, time_duration duration) {
 
 BOOST_AUTO_TEST_CASE(test_slow) {
     size_t c = countInLoop(5, seconds(5));
-    BOOST_WARN_CLOSE((float) c, 25, 10);
+    BOOST_WARN_CLOSE((float) c, 25., 10.);
 }
 
 BOOST_AUTO_TEST_CASE(test_fast) {
     size_t c = countInLoop(100, seconds(5));
-    BOOST_WARN_CLOSE((float) c, 500, 10);
+    BOOST_WARN_CLOSE((float) c, 500., 10.);
 }

@@ -22,6 +22,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 
+#define BOOST_TEST_MODULE SyslogBulkUploaderTests
+#include <boost/test/unit_test.hpp>
+#include <memory>
+#define BOOST_FILESYSTEM_NO_DEPRECATED
+#include <boost/filesystem.hpp>
+#include <boost/date_time/posix_time/posix_time.hpp>
+
 #include "../src/SyslogBulkUploader.h"
 #include "../src/Reader.h"
 #include "../src/Writer.h"
@@ -29,12 +36,6 @@ SOFTWARE.
 #include "../src/UDPWriter.h"
 #include "UdpSyslogServer.h"
 #include "../src/RFC3164FormattedSyslogMessage.h"
-#define BOOST_TEST_MODULE SyslogBulkUploaderTests
-#include <boost/test/unit_test.hpp>
-#include <memory>
-#define BOOST_FILESYSTEM_NO_DEPRECATED
-#include <boost/filesystem.hpp>
-#include <boost/date_time/posix_time/posix_time.hpp>
 
 class MockReader : public Reader {
 public:
