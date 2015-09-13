@@ -69,7 +69,14 @@ In order to build syslog-bulk-uploader from source, you will need to have a coup
 
 ### Building on Windows systems
  
-Not available yet. Check back soon.
+After installing and setting up Visual Studio, git, cmake and boost, building is simple:
+
+    git clone git@github.com:zmarko/syslog-bulk-uploader.git
+    cd syslog-bulk-uploader\build
+    cmake ..
+
+and you will find Visual Studio solution (.sln) file in syslog-bulk-uploader\build directory.
+You can use `cmake .. -G "NMake Makefiles"` in order to generate nmake makefile, so you can run build from command line.
 
 ### Installers
 During the build it is also possible to build installer packages. Supported installers at this time are:
