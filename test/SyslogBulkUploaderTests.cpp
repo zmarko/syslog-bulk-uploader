@@ -90,7 +90,7 @@ BOOST_AUTO_TEST_CASE(test_udp_writer) {
     ptime start(second_clock::local_time());
     boost::asio::io_service ios;
     FileReader r("../test/sample1");
-    UDPWriter w("localhost", 51514);
+    UDPWriter w("127.0.0.1", 51514);
     SyslogBulkUploader ul(r, w);
     UdpSyslogServer server(ios, 51514, 2000);
     ul.run();

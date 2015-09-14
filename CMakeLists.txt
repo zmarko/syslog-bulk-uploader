@@ -9,8 +9,8 @@ if(UNIX)
 endif()
 
 if(WIN32)
-	add_definitions(-DWINVER=0x0501)
-	add_definitions(-D_WIN32_WINNT=0x0501)
+	add_definitions(-DWINVER=0x0601)
+	add_definitions(-D_WIN32_WINNT=0x0601)
 endif()
 
 set(Boost_USE_STATIC_LIBS ON)

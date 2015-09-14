@@ -71,7 +71,8 @@ private:
     }
 
     void deadlineHandler() {
-        if (_dt.expires_at() <= deadline_timer::traits_type::now()) {
+        auto delta = deadline_timer::traits_type::now() - _dt.expires_at();
+        if (delta != not_a_date_time && delta >= milliseconds(0)) {
             _socket.cancel();
             _dt.expires_at(boost::posix_time::pos_infin);
         }
