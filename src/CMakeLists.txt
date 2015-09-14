@@ -47,7 +47,11 @@ install(TARGETS syslog-bulk-uploader DESTINATION bin)
 ## Installers configuration
 ##
 include(InstallRequiredSystemLibraries)
-set(CPACK_GENERATOR "RPM;DEB;TGZ")
+if(WIN32)
+	set(CPACK_GENERATOR "ZIP")
+else()
+	set(CPACK_GENERATOR "RPM;DEB;TGZ")
+endif()
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "${VER_NAME}")
 set(CPACK_PACKAGE_VENDOR "Marko Zivanovic <marko@zivanovic.in.rs>")
 set(CPACK_PACKAGE_CONTACT "${CPACK_PACKAGE_VENDOR}")
