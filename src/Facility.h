@@ -61,7 +61,7 @@ public:
         return os;
     }
 
-    friend const uint8_t operator+(const Facility& f, const Severity& s);
+    friend uint8_t operator+(const Facility& f, const Severity& s);
 
 private:
 
@@ -92,8 +92,8 @@ private:
         {"local7", 23}
     };
     const uint8_t _value;
-    const std::string readFromStream(std::istream&);
-    const uint8_t readFromString(const std::string&);
+    std::string readFromStream(std::istream&);
+    uint8_t readFromString(const std::string&);
 };
 
 #endif	/* FACILITY_H */

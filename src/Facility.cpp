@@ -26,7 +26,7 @@ SOFTWARE.
 #include <map>
 #include "Facility.h"
 
-const std::string Facility::readFromStream(std::istream& src) {
+std::string Facility::readFromStream(std::istream& src) {
     std::string ret;
     while (src) {
         auto c = src.get();
@@ -39,7 +39,7 @@ const std::string Facility::readFromStream(std::istream& src) {
     return ret;
 }
 
-const uint8_t Facility::readFromString(const std::string& src) {
+uint8_t Facility::readFromString(const std::string& src) {
     const auto& value = VALUES.find(boost::algorithm::to_lower_copy(src));
     if (value != VALUES.end()) {
         return value->second;

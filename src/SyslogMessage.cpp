@@ -51,16 +51,16 @@ const boost::posix_time::ptime SyslogMessage::readTimestamp(std::istream& src) {
         }
     }
     return boost::posix_time::time_from_string(ts);
-};
+}
 
 const Facility SyslogMessage::readFacility(std::istream& src) {
     skipWhitespace(src);
     return Facility(src);
-};
+}
 
 const Severity SyslogMessage::readSeverity(std::istream& src) {
     return Severity(src);
-};
+}
 
 const std::string SyslogMessage::readSource(std::istream& src) {
     std::string ret;
@@ -74,16 +74,16 @@ const std::string SyslogMessage::readSource(std::istream& src) {
         }
     }
     return ret;
-};
+}
 
 const std::string SyslogMessage::readMessage(std::istream& src) {
     std::string ret;
     skipWhitespace(src);
     std::getline(src, ret);
     return ret;
-};
+}
 
-const uint8_t operator+(const Facility& f, const Severity& s) {
+uint8_t operator+(const Facility& f, const Severity& s) {
     return f._value * 8 + s._value;
-};
+}
 

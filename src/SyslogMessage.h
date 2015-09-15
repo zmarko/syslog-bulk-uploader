@@ -64,7 +64,7 @@ public:
         return _timestamp;
     }
 
-    const uint8_t priority() const {
+    uint8_t priority() const {
         return _facility + _severity;
     };
 

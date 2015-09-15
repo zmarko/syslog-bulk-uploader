@@ -54,7 +54,7 @@ public:
         return _value == right._value;
     }
 
-    friend const uint8_t operator+(const Facility& f, const Severity& s);
+    friend uint8_t operator+(const Facility& f, const Severity& s);
 
     friend std::ostream& operator<<(std::ostream& os, const Severity& obj) {
         os << std::to_string(obj._value);
@@ -75,8 +75,8 @@ private:
     };
 
     const uint8_t _value;
-    const std::string readFromStream(std::istream& source);
-    const uint8_t readFromString(const std::string& src);
+    std::string readFromStream(std::istream& source);
+    uint8_t readFromString(const std::string& src);
 };
 
 #endif	/* SEVERITY_H */

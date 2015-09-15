@@ -39,7 +39,7 @@ UDPWriter::UDPWriter(const std::string& destination, const uint16_t port) {
     } else {
         throw "Destination not found: " + destination;
     }
-};
+}
 
 void UDPWriter::sendMessage(std::shared_ptr<const SyslogMessage> message) {
     if (_socket.is_open()) {
