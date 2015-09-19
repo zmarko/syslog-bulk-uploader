@@ -24,14 +24,17 @@ SOFTWARE.
 
 #include "SyslogMessage.h"
 
-void skipWhitespace(std::istream& src) {
-    while (src) {
-        auto c = src.peek();
-        if (c == ' ' || c == '\t') {
-            src.get();
-            continue;
-        } else {
-            break;
+namespace {
+
+    void skipWhitespace(std::istream& src) {
+        while (src) {
+            auto c = src.peek();
+            if (c == ' ' || c == '\t') {
+                src.get();
+                continue;
+            } else {
+                break;
+            }
         }
     }
 }

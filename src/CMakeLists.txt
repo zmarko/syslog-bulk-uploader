@@ -3,6 +3,11 @@ if(WIN32)
 	list(APPEND BOOST_LIBS regex chrono)
 endif()
 
+if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+    # Statically link C++ library for better compatibility on different Linux distributions
+    SET(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++")
+endif()
+
 find_package(Boost COMPONENTS ${BOOST_LIBS} REQUIRED)
 find_package(Threads)
 
