@@ -40,12 +40,12 @@ SOFTWARE.
 class MockReader : public Reader {
 public:
 
-    virtual std::shared_ptr<const SyslogMessage> nextMessage() {
+    virtual std::unique_ptr<const SyslogMessage> nextMessage() {
         if (_pos >= _messages.size()) {
-            return std::shared_ptr<SyslogMessage>();
+            return std::unique_ptr<SyslogMessage>();
         } else {
             std::stringstream ss(_messages[_pos++]);
-            return std::shared_ptr<SyslogMessage>(new SyslogMessage(dynamic_cast<std::istream&> (ss)));
+            return std::unique_ptr<SyslogMessage>(new SyslogMessage(dynamic_cast<std::istream&> (ss)));
         }
     }
 private:
@@ -60,11 +60,11 @@ private:
 class MockWriter : public Writer {
 public:
 
-    virtual void sendMessage(std::shared_ptr<const SyslogMessage> msg) {
-        _messages.push_back(msg);
-        std::cout << *msg << std::endl;
+    virtual void sendMessage(const SyslogMessage& msg) {
+        _messages.push_back(&msg);
+        std::cout << msg << std::endl;
     };
-    std::vector<std::shared_ptr<const SyslogMessage>> _messages;
+    std::vector<const SyslogMessage*> _messages;
 };
 
 BOOST_AUTO_TEST_CASE(test_run) {

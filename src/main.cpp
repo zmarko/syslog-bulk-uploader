@@ -54,7 +54,7 @@ void help() {
     desc.print(cout);
 }
 
-void preSendCallback(shared_ptr<const SyslogMessage>) {
+void preSendCallback(const SyslogMessage&) {
     ptime now = second_clock::local_time();
     if (now - lastPrint > printInterval) {
         cout << "." << flush;

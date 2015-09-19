@@ -27,7 +27,7 @@ SOFTWARE.
 
 class Facility;
 
-class Severity {
+class Severity final {
 public:
 
     Severity(const std::string& src) : _value(readFromString(src)) {
@@ -40,9 +40,6 @@ public:
     };
 
     Severity(const Severity& orig) : _value(orig._value) {
-    };
-
-    virtual ~Severity() {
     };
 
     bool operator!=(const Severity& right) const {

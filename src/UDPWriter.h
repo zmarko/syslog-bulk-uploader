@@ -29,12 +29,12 @@ SOFTWARE.
 #include <boost/asio.hpp>
 #include "Writer.h"
 
-class UDPWriter : public Writer {
+class UDPWriter final : public Writer {
 public:
 
     UDPWriter(const std::string&, const uint16_t);
 
-    virtual void sendMessage(std::shared_ptr<const SyslogMessage>);
+    virtual void sendMessage(const SyslogMessage&) override;
 
 private:
     boost::asio::io_service _ios;

@@ -30,18 +30,18 @@ SOFTWARE.
 #include "Facility.h"
 #include "Severity.h"
 
-class SyslogMessage {
+class SyslogMessage final {
 public:
+
+    SyslogMessage() = delete;
+    SyslogMessage(const SyslogMessage&) = default;
+    SyslogMessage& operator=(const SyslogMessage&) = default;
+    SyslogMessage(SyslogMessage&&) = delete;
+    SyslogMessage& operator=(SyslogMessage&&) = delete;
+    virtual ~SyslogMessage() = default;
 
     SyslogMessage(std::istream& src) : _timestamp(readTimestamp(src)), _facility(readFacility(src)),
     _severity(readSeverity(src)), _source(readSource(src)), _message(readMessage(src)) {
-    };
-
-    SyslogMessage(const SyslogMessage& orig) : _timestamp(orig._timestamp), _facility(orig._facility),
-    _severity(orig._severity), _source(orig._source), _message(orig._message) {
-    };
-
-    virtual ~SyslogMessage() {
     };
 
     const Facility facility() const {

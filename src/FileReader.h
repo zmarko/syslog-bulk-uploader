@@ -29,7 +29,7 @@ SOFTWARE.
 #include "Reader.h"
 #include "SyslogMessage.h"
 
-class FileReader : public Reader {
+class FileReader final : public Reader {
 public:
 
     FileReader(const std::string& filename) : _stream(filename) {
@@ -38,8 +38,8 @@ public:
         }
     }
 
-    virtual std::shared_ptr<const SyslogMessage> nextMessage() {
-        std::shared_ptr<const SyslogMessage> ret;
+    virtual std::unique_ptr<const SyslogMessage> nextMessage() override {
+        std::unique_ptr<const SyslogMessage> ret;
         if (_stream.is_open() && !_stream.eof() && !_stream.fail()) {
             ret.reset(new SyslogMessage(_stream));
             for (auto c = _stream.peek(); c == '\n' || c == '\r'; _stream.get(), c = _stream.peek());

@@ -35,9 +35,9 @@ void SyslogBulkUploader::run() {
     while (auto msg = _reader.nextMessage()) {
         freqLimit.tick();
         if (_preSendCallback)
-            _preSendCallback(msg);
-        _writer.sendMessage(msg);
+            _preSendCallback(*msg);
+        _writer.sendMessage(*msg);
         if (_postSendCallback)
-            _postSendCallback(msg);
+            _postSendCallback(*msg);
     }
 }

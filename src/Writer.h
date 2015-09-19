@@ -31,7 +31,10 @@ SOFTWARE.
 
 class Writer : private boost::noncopyable {
 public:
-    virtual void sendMessage(std::shared_ptr<const SyslogMessage>) = 0;
+
+    virtual ~Writer() {
+    };
+    virtual void sendMessage(const SyslogMessage&) = 0;
 };
 
 #endif	/* WRITER_H */

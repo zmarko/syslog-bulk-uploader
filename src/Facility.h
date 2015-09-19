@@ -29,7 +29,7 @@ SOFTWARE.
 
 class Severity;
 
-class Facility {
+class Facility final {
 public:
 
     Facility(const char* src) : Facility(std::string(src)) {
@@ -42,9 +42,6 @@ public:
     };
 
     Facility(const Facility& orig) : _value(orig._value) {
-    };
-
-    virtual ~Facility() {
     };
 
     bool operator!=(const Facility& right) const {

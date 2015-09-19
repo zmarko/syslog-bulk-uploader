@@ -33,10 +33,10 @@ class Reader;
 class Writer;
 class SyslogMessage;
 
-class SyslogBulkUploader : boost::noncopyable {
+class SyslogBulkUploader final : boost::noncopyable {
 public:
 
-    typedef std::function<void(std::shared_ptr<const SyslogMessage>)> Callback;
+    typedef std::function<void(const SyslogMessage&)> Callback;
 
     SyslogBulkUploader(Reader& reader, Writer& writer, const size_t& mps = DEFAULT_MPS) : _reader(reader),
     _writer(writer), _mps(mps) {

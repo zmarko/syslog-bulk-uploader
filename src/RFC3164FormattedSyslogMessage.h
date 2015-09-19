@@ -27,27 +27,21 @@ SOFTWARE.
 
 #include "SyslogMessage.h"
 
-class RFC3164FormattedSyslogMessage {
+class RFC3164FormattedSyslogMessage final {
 public:
 
     RFC3164FormattedSyslogMessage(const SyslogMessage& msg) : _message(msg) {
-        // locale takes over ownership of facet, so, no need to keep track of it
-        _stream.imbue(std::locale(std::locale::classic(), new boost::posix_time::time_facet("%b %e %H:%M:%S")));
-    };
-
-    RFC3164FormattedSyslogMessage(const RFC3164FormattedSyslogMessage& orig) : RFC3164FormattedSyslogMessage(orig._message) {
-    };
-
-    virtual ~RFC3164FormattedSyslogMessage() {
     };
 
     const std::string operator()() {
-        _stream.str("");
-        _stream << "<" << std::to_string(_message.priority()) << ">";
-        _stream << _message.timestamp() << " ";
-        _stream << _message.source() << " ";
-        _stream << _message.message();
-        std::string ret = _stream.str();
+        std::stringstream stream;
+        stream.imbue(std::locale(std::locale::classic(), new boost::posix_time::time_facet("%b %e %H:%M:%S")));
+        stream.str("");
+        stream << "<" << std::to_string(_message.priority()) << ">";
+        stream << _message.timestamp() << " ";
+        stream << _message.source() << " ";
+        stream << _message.message();
+        std::string ret = stream.str();
         if (ret.size() > MAX_LEN) {
             ret = ret.substr(0, MAX_LEN);
         }
@@ -57,7 +51,6 @@ public:
 private:
     static const size_t MAX_LEN = 1024;
     const SyslogMessage& _message;
-    std::stringstream _stream;
 };
 
 #endif	/* RFC3164FORMATTEDSYSLOGMESSAGE_H */

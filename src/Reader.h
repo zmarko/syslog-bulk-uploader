@@ -32,7 +32,10 @@ class SyslogMessage;
 
 class Reader : private boost::noncopyable {
 public:
-    virtual std::shared_ptr<const SyslogMessage> nextMessage() = 0;
+
+    virtual ~Reader() {
+    };
+    virtual std::unique_ptr<const SyslogMessage> nextMessage() = 0;
 };
 
 #endif	/* READER_H */

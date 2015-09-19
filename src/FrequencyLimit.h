@@ -29,7 +29,7 @@ SOFTWARE.
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/thread/thread.hpp>
 
-class FrequencyLimit {
+class FrequencyLimit final {
 public:
 
     FrequencyLimit(const size_t& limit) : _target(boost::posix_time::microseconds(1000000 / limit)),
