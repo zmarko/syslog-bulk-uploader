@@ -30,7 +30,7 @@ SOFTWARE.
 class RFC3164_fmt final {
 public:
 
-	RFC3164_fmt(const syslog_message& msg) : message_(msg) {};
+	explicit RFC3164_fmt(const syslog_message& msg) : message_(msg) {};
 
 	const std::string operator()();
 

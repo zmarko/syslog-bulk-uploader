@@ -31,9 +31,9 @@ class severity;
 
 class facility final {
 public:
-	facility(const char*);
-	facility(const std::string&);
-	facility(std::istream&);
+	explicit facility(const char*);
+	explicit facility(const std::string&);
+	explicit facility(std::istream&);
 
 	facility() = delete;
 	~facility() = default;

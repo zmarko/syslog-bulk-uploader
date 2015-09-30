@@ -29,10 +29,16 @@ class facility;
 
 class severity final {
 public:
-	severity(const std::string&);
-	severity(const char*);
-	severity(std::istream&);
-	severity(const severity&);
+	explicit severity(const std::string&);
+	explicit severity(const char*);
+	explicit severity(std::istream&);
+
+	severity() = delete;
+	~severity() = default;
+	severity(const severity&) = default;
+	severity(severity&&) = default;
+	severity& operator=(const severity&) = default;
+	severity& operator=(severity&&) = default;
 
 	bool operator!=(const severity&) const;
 	bool operator==(const severity&) const;

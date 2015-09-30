@@ -1,7 +1,7 @@
 /*
- The MIT License (MIT)
+The MIT License (MIT)
 
-Copyright (c) 2015 Marko Živanović
+Copyright (c) 2015 Marko �ivanovi?
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -20,24 +20,25 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
- */
+*/
 
-#ifndef FREQUENCY_LIMIT_H
-#define	FREQUENCY_LIMIT_H
+#include "frequency_limit.h"
 
-#include <boost/date_time/posix_time/posix_time.hpp>
-#include <boost/thread/thread.hpp>
+frequency_limit::frequency_limit(const size_t& limit)
+	: target_latency_(boost::posix_time::microseconds(1000000 / limit)),
+	delay_(boost::posix_time::milliseconds(0)) {};
 
-class frequency_limit final {
-public:
-	explicit frequency_limit(const size_t&);
-	void operator()();
-
-private:
-	const boost::posix_time::time_duration target_latency_;
-	boost::posix_time::time_duration delay_;
-	boost::posix_time::ptime prev_ts_;
+void frequency_limit::operator()() {
+	auto now(boost::posix_time::microsec_clock::local_time());
+	if (prev_ts_ == boost::posix_time::not_a_date_time) {
+		prev_ts_ = now;
+	} else {
+		auto latency = now - prev_ts_;
+		auto diff = target_latency_ - latency;
+		delay_ = delay_ + diff;
+		if (diff > boost::posix_time::microseconds(0)) {
+			boost::this_thread::sleep(delay_);
+		}
+		prev_ts_ = now;
+	}
 };
-
-#endif	/* FREQUENCY_LIMIT_H */
-

@@ -31,7 +31,7 @@ SOFTWARE.
 
 class file_reader final : public reader {
 public:
-	file_reader(const std::string&);
+	explicit file_reader(const std::string&);
 	virtual std::unique_ptr<const syslog_message> next_message() override;
 
 private:

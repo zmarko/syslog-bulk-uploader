@@ -21,6 +21,7 @@ include_directories(
 add_library(slbu-lib 
     facility.cpp
 	file_reader.cpp
+	frequency_limit.cpp
 	RFC3164_fmt.cpp
     severity.cpp
     syslog_bulk_uploader.cpp

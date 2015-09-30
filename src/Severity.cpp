@@ -24,7 +24,7 @@ SOFTWARE.
 
 #include <boost/algorithm/string.hpp>
 #include <map>
-#include "Severity.h"
+#include "severity.h"
 
 using namespace std;
 
@@ -66,7 +66,6 @@ namespace {
 severity::severity(const string& src) : _value(read_from_string(src)) {};
 severity::severity(const char* src) : severity(string(src)) {};
 severity::severity(istream& source) : severity(read_from_stream(source)) {};
-severity::severity(const severity& orig) : _value(orig._value) {};
 
 bool severity::operator!=(const severity& right) const {
 	return !(*this == right);

@@ -33,8 +33,9 @@ SOFTWARE.
 class syslog_message final {
 public:
 
+	explicit syslog_message(std::istream&);
+
 	syslog_message() = delete;
-	syslog_message(std::istream&);
 	syslog_message(const syslog_message&) = default;
 	syslog_message(syslog_message&&) = default;
 	syslog_message& operator=(const syslog_message&) = default;
