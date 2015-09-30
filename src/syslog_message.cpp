@@ -121,7 +121,7 @@ const uint8_t syslog_message::priority() const {
 };
 
 uint8_t operator+(const facility& f, const severity& s) {
-	return f._value * 8 + s._value;
+	return f.value_ * 8 + s.value_;
 }
 
 ostream& operator<<(std::ostream& os, const syslog_message& obj) {

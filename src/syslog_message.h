@@ -32,7 +32,6 @@ SOFTWARE.
 
 class syslog_message final {
 public:
-
 	explicit syslog_message(std::istream&);
 
 	syslog_message() = delete;

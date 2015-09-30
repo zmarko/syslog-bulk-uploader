@@ -47,7 +47,7 @@ public:
 	friend std::ostream& operator<<(std::ostream&, const severity&);
 
 private:
-	const uint8_t _value;
+	const uint8_t value_;
 };
 
 #endif	/* SEVERITY_H */

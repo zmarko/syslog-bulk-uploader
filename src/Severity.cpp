@@ -63,7 +63,7 @@ namespace {
 	}
 }
 
-severity::severity(const string& src) : _value(read_from_string(src)) {};
+severity::severity(const string& src) : value_(read_from_string(src)) {};
 severity::severity(const char* src) : severity(string(src)) {};
 severity::severity(istream& source) : severity(read_from_stream(source)) {};
 
@@ -72,10 +72,10 @@ bool severity::operator!=(const severity& right) const {
 }
 
 bool severity::operator==(const severity& right) const {
-	return _value == right._value;
+	return value_ == right.value_;
 }
 
 std::ostream& operator<<(std::ostream& os, const severity& obj) {
-	os << to_string(obj._value);
+	os << to_string(obj.value_);
 	return os;
 }

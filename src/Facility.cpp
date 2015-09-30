@@ -81,7 +81,7 @@ namespace {
 }
 
 facility::facility(const char* src) : facility(string(src)) {};
-facility::facility(const string& source) : _value(read_from_string(source)) {};
+facility::facility(const string& source) : value_(read_from_string(source)) {};
 facility::facility(istream& source) : facility(read_from_stream(source)) {};
 
 bool facility::operator!=(const facility& right) const {
@@ -89,11 +89,11 @@ bool facility::operator!=(const facility& right) const {
 }
 
 bool facility::operator==(const facility& right) const {
-	return _value == right._value;
+	return value_ == right.value_;
 }
 
 std::ostream& operator<<(std::ostream& os, const facility& obj) {
-	os << to_string(obj._value);
+	os << to_string(obj.value_);
 	return os;
 }
 

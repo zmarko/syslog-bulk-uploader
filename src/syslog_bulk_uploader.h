@@ -35,13 +35,10 @@ class syslog_message;
 
 class syslog_bulk_uploader final : boost::noncopyable {
 public:
-
-	using callback = boost::signals2::signal<void(const syslog_message&)>;
-
 	syslog_bulk_uploader(reader&, writer&, const size_t = 1000);
-
 	void run();
 
+	using callback = boost::signals2::signal<void(const syslog_message&)>;
 	void add_before_send_cb(const callback::slot_type&);
 	void add_after_send_cb(const callback::slot_type&);
 

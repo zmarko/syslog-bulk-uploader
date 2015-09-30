@@ -46,7 +46,7 @@ public:
 	bool operator==(const facility&) const;
 
 private:
-	const uint8_t _value;
+	const uint8_t value_;
 
 	friend std::ostream& operator<<(std::ostream&, const facility&);
 	friend uint8_t operator+(const facility& f, const severity& s);
