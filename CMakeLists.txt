@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
-project(syslog-bulk-uploader)
-set(SLBU_DESC "Syslog Bulk Uploader")
+project(syslog_-bulk_-uploader)
+set(SLBU_DESC "syslog_ bulk_ uploader")
 set(SLBU_VER "1.1.0-alpha.1")
 
 if(UNIX)
@@ -24,8 +24,8 @@ add_subdirectory(src)
 add_subdirectory(test)
 
 enable_testing()
-add_test(NAME SyslogBulkUploaderTests COMMAND SyslogBulkUploaderTests)
-add_test(NAME SyslogMessageTests COMMAND SyslogMessageTests)
-add_test(NAME RFC3164FormattedSyslogMessageTests COMMAND RFC3164FormattedSyslogMessageTests)
-add_test(NAME FrequencyLimitTests COMMAND FrequencyLimitTests)
+add_test(NAME syslog_bulk_uploader_tests COMMAND syslog_bulk_uploader_tests)
+add_test(NAME syslog_message_tests COMMAND syslog_message_tests)
+add_test(NAME RFC3164_fmt_tests COMMAND RFC3164_fmt_tests)
+add_test(NAME frequency_limit_tests COMMAND frequency_limit_tests)
 
