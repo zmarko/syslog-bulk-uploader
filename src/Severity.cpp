@@ -26,26 +26,57 @@ SOFTWARE.
 #include <map>
 #include "Severity.h"
 
-std::string Severity::readFromStream(std::istream& src) {
-    std::string ret;
-    while (src) {
-        auto c = src.get();
-        if (c == ' ' || c == '\t') {
-            break;
-        } else {
-            ret.push_back(c);
-        }
-    }
-    return ret;
+using namespace std;
+
+namespace {
+	const map<string, uint8_t> severity_strings{
+		{ "emergency", 0 },
+		{ "alert", 1 },
+		{ "critical", 2 },
+		{ "error", 3 },
+		{ "warning", 4 },
+		{ "notice", 5 },
+		{ "informational", 6 },
+		{ "debug", 7 }
+	};
+
+	string read_from_stream(istream& src) {
+		string ret;
+		while (src) {
+			auto c = src.get();
+			if (c == ' ' || c == '\t') {
+				break;
+			} else {
+				ret.push_back(c);
+			}
+		}
+		return ret;
+	}
+
+	uint8_t read_from_string(const string& src) {
+		const auto& value = severity_strings.find(boost::algorithm::to_lower_copy(src));
+		if (value != severity_strings.end()) {
+			return value->second;
+		} else {
+			throw "illegal severity: " + src;
+		}
+	}
 }
 
-uint8_t Severity::readFromString(const std::string& src) {
-    const auto &value = VALUES.find(boost::algorithm::to_lower_copy(src));
-    if (value != VALUES.end()) {
-        return value->second;
-    } else {
-        throw "illegal severity: " + src;
-    }
+severity::severity(const string& src) : _value(read_from_string(src)) {};
+severity::severity(const char* src) : severity(string(src)) {};
+severity::severity(istream& source) : severity(read_from_stream(source)) {};
+severity::severity(const severity& orig) : _value(orig._value) {};
+
+bool severity::operator!=(const severity& right) const {
+	return !(*this == right);
 }
 
+bool severity::operator==(const severity& right) const {
+	return _value == right._value;
+}
 
+std::ostream& operator<<(std::ostream& os, const severity& obj) {
+	os << to_string(obj._value);
+	return os;
+}

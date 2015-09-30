@@ -19,11 +19,13 @@ include_directories(
 )
 
 add_library(slbu-lib 
-    Facility.cpp
-    Severity.cpp
-    SyslogBulkUploader.cpp
-    SyslogMessage.cpp
-    UDPWriter.cpp
+    facility.cpp
+	file_reader.cpp
+	RFC3164_fmt.cpp
+    severity.cpp
+    syslog_bulk_uploader.cpp
+    syslog_message.cpp
+    udp_writer.cpp
 )
 target_link_libraries(slbu-lib 
     ${Boost_DATE_TIME_LIBRARY}

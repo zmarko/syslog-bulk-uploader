@@ -22,40 +22,30 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 
-#ifndef FREQUENCYLIMIT_H
-#define	FREQUENCYLIMIT_H
+#include <string>
+#include "udp_writer.h"
+#include "RFC3164_fmt.h"
 
-#include <boost/noncopyable.hpp>
-#include <boost/date_time/posix_time/posix_time.hpp>
-#include <boost/thread/thread.hpp>
+using boost::asio::ip::udp;
+using namespace boost::asio;
 
-class FrequencyLimit final {
-public:
+udp_writer::udp_writer(const std::string& destination, const uint16_t port) {
+    udp::resolver resolver(ios_);
+    udp::resolver::query query(destination, std::to_string(port));
+    udp::resolver::iterator it = resolver.resolve(query);
+    if (it != udp::resolver::iterator()) {
+        auto endpoint = *it;
+        socket_.connect(endpoint);
+    } else {
+        throw "destination not found: " + destination;
+    }
+}
 
-    FrequencyLimit(const size_t& limit) : _target(boost::posix_time::microseconds(1000000 / limit)),
-    _delay(boost::posix_time::milliseconds(0)) {
-    };
-
-    void tick() {
-        auto now(boost::posix_time::microsec_clock::local_time());
-        if (_prev == boost::posix_time::not_a_date_time) {
-            _prev = now;
-        } else {
-            auto latency = now - _prev;
-            auto diff = _target - latency;
-            _delay = _delay + diff;
-            if (diff > boost::posix_time::microseconds(0)) {
-                boost::this_thread::sleep(_delay);
-            }
-            _prev = now;
-        }
-    };
-
-private:
-    const boost::posix_time::time_duration _target;
-    boost::posix_time::time_duration _delay;
-    boost::posix_time::ptime _prev;
-};
-
-#endif	/* FREQUENCYLIMIT_H */
-
+void udp_writer::send(const syslog_message& message) {
+    if (socket_.is_open()) {
+        auto fmt_msg = RFC3164_fmt{message};
+        auto fmt_str = fmt_msg();
+        auto buff = buffer(fmt_str);
+        socket_.send(buff);
+    }
+}

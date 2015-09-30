@@ -24,28 +24,77 @@ SOFTWARE.
 
 #include <boost/algorithm/string.hpp>
 #include <map>
-#include "Facility.h"
+#include "facility.h"
 
-std::string Facility::readFromStream(std::istream& src) {
-    std::string ret;
-    while (src) {
-        auto c = src.get();
-        if (c == '.') {
-            break;
-        } else {
-            ret.push_back(c);
-        }
-    }
-    return ret;
+using namespace std;
+using namespace boost;
+
+namespace {
+	const map<string, uint8_t> facility_strings{
+		{ "kern", 0 },
+		{ "user", 1 },
+		{ "mail", 2 },
+		{ "daemon", 3 },
+		{ "auth", 4 },
+		{ "syslog", 5 },
+		{ "lpr", 6 },
+		{ "news", 7 },
+		{ "uucp", 8 },
+		{ "clock", 9 },
+		{ "authpriv", 10 },
+		{ "ftp", 11 },
+		{ "ntp", 12 },
+		{ "logaudit", 13 },
+		{ "logalert", 14 },
+		{ "cron", 15 },
+		{ "local0", 16 },
+		{ "local1", 17 },
+		{ "local2", 18 },
+		{ "local3", 19 },
+		{ "local4", 20 },
+		{ "local5", 21 },
+		{ "local6", 22 },
+		{ "local7", 23 }
+	};
+
+	string read_from_stream(istream& src) {
+		string ret;
+		while (src) {
+			auto c = src.get();
+			if (c == '.') {
+				break;
+			} else {
+				ret.push_back(c);
+			}
+		}
+		return ret;
+	}
+
+	uint8_t read_from_string(const string& src) {
+		const auto& value = facility_strings.find(to_lower_copy(src));
+		if (value != facility_strings.end()) {
+			return value->second;
+		} else {
+			throw "illegal facility value: " + src;
+		}
+	}
 }
 
-uint8_t Facility::readFromString(const std::string& src) {
-    const auto& value = VALUES.find(boost::algorithm::to_lower_copy(src));
-    if (value != VALUES.end()) {
-        return value->second;
-    } else {
-        throw "Illegal facility value: " + src;
-    }
+facility::facility(const char* src) : facility(string(src)) {};
+facility::facility(const string& source) : _value(read_from_string(source)) {};
+facility::facility(istream& source) : facility(read_from_stream(source)) {};
+
+bool facility::operator!=(const facility& right) const {
+	return !(*this == right);
+}
+
+bool facility::operator==(const facility& right) const {
+	return _value == right._value;
+}
+
+std::ostream& operator<<(std::ostream& os, const facility& obj) {
+	os << to_string(obj._value);
+	return os;
 }
 
 

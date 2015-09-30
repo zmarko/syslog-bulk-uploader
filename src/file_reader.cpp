@@ -1,7 +1,7 @@
 /*
- The MIT License (MIT)
+The MIT License (MIT)
 
-Copyright (c) 2015 Marko Živanović
+Copyright (c) 2015 Marko �ivanovi?
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -20,32 +20,23 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
- */
+*/
 
-#define BOOST_TEST_MODULE FrequencyLimitTests
-#include <boost/test/unit_test.hpp>
-#include <boost/date_time/posix_time/posix_time.hpp>
-#include "../src/FrequencyLimit.h"
+#include "file_reader.h"
 
-using namespace boost::posix_time;
+using namespace std;
 
-size_t countInLoop(size_t freq, time_duration duration) {
-    FrequencyLimit f(freq);
-    ptime start(second_clock::local_time());
-    int c = 0;
-    while (second_clock::local_time() - start < duration) {
-        f.tick();
-        c++;
-    }
-    return c;
+file_reader::file_reader(const string& filename) : stream_(filename) {
+	if (!stream_.is_open()) {
+		throw "error opening file: " + filename;
+	}
 }
 
-BOOST_AUTO_TEST_CASE(test_slow) {
-    size_t c = countInLoop(5, seconds(5));
-    BOOST_WARN_CLOSE((float) c, 25., 10.);
-}
-
-BOOST_AUTO_TEST_CASE(test_fast) {
-    size_t c = countInLoop(100, seconds(5));
-    BOOST_WARN_CLOSE((float) c, 500., 10.);
+unique_ptr<const syslog_message> file_reader::next_message() {
+	unique_ptr<const syslog_message> ret;
+	if (stream_.is_open() && !stream_.eof() && !stream_.fail()) {
+		ret.reset(new syslog_message(stream_));
+		for (auto c = stream_.peek(); c == '\n' || c == '\r'; stream_.get(), c = stream_.peek());
+	}
+	return ret;
 }

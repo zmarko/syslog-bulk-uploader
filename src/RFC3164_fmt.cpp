@@ -1,7 +1,7 @@
 /*
- The MIT License (MIT)
+The MIT License (MIT)
 
-Copyright (c) 2015 Marko Živanović
+Copyright (c) 2015 Marko �ivanovi?
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -20,32 +20,26 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
- */
+*/
 
-#include <string>
-#include "UDPWriter.h"
-#include "RFC3164FormattedSyslogMessage.h"
+#include "RFC3164_fmt.h"
 
-using boost::asio::ip::udp;
-using namespace boost::asio;
+using namespace std;
 
-UDPWriter::UDPWriter(const std::string& destination, const uint16_t port) {
-    udp::resolver resolver(_ios);
-    udp::resolver::query query(destination, std::to_string(port));
-    udp::resolver::iterator it = resolver.resolve(query);
-    if (it != udp::resolver::iterator()) {
-        auto endpoint = *it;
-        _socket.connect(endpoint);
-    } else {
-        throw "Destination not found: " + destination;
-    }
+namespace {
+	const int MAX_LEN = 1024;
 }
 
-void UDPWriter::sendMessage(const SyslogMessage& message) {
-    if (_socket.is_open()) {
-        auto fmtMsg = RFC3164FormattedSyslogMessage{message};
-        auto fmtStr = fmtMsg();
-        auto buff = buffer(fmtStr);
-        _socket.send(buff);
-    }
-}
+const string RFC3164_fmt::operator()() {
+	stringstream stream;
+	stream.imbue(locale(locale::classic(), new boost::posix_time::time_facet("%b %e %H:%M:%S")));
+	stream << "<" << to_string(message_.priority()) << ">"
+		<< message_.timestamp() << " "
+		<< message_.source() << " "
+		<< message_.message();
+	string ret = stream.str();
+	if (ret.size() > MAX_LEN) {
+		ret = ret.substr(0, MAX_LEN);
+	}
+	return ret;
+};

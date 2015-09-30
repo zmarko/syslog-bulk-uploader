@@ -22,22 +22,21 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 
-#include "SyslogBulkUploader.h"
-#include "Reader.h"
-#include "Writer.h"
-#include "FrequencyLimit.h"
+#ifndef FILE_READER_H
+#define	FILE_READER_H
 
-const size_t SyslogBulkUploader::DEFAULT_MPS;
+#include <fstream>
+#include "reader.h"
+#include "syslog_message.h"
 
-void SyslogBulkUploader::run() {
-    FrequencyLimit freqLimit(_mps);
+class file_reader final : public reader {
+public:
+	file_reader(const std::string&);
+	virtual std::unique_ptr<const syslog_message> next_message() override;
 
-    while (auto msg = _reader.nextMessage()) {
-        freqLimit.tick();
-        if (_preSendCallback)
-            _preSendCallback(*msg);
-        _writer.sendMessage(*msg);
-        if (_postSendCallback)
-            _postSendCallback(*msg);
-    }
-}
+private:
+	std::ifstream stream_;
+};
+
+#endif	/* FILE_READER_H */
+

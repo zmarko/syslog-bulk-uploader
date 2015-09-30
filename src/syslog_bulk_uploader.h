@@ -22,19 +22,36 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 
-#ifndef READER_H
-#define	READER_H
+#ifndef SYSLOG_BULK_UPLOADER_H
+#define	SYSLOG_BULK_UPLOADER_H
 
+#include <boost/noncopyable.hpp>
+#include <boost/signals2.hpp>
 #include <memory>
 
+class reader;
+class writer;
 class syslog_message;
 
-class reader {
+class syslog_bulk_uploader final : boost::noncopyable {
 public:
 
-	virtual ~reader() {};
-	virtual std::unique_ptr<const syslog_message> next_message() = 0;
+	using callback = boost::signals2::signal<void(const syslog_message&)>;
+
+	syslog_bulk_uploader(reader&, writer&, const size_t = 1000);
+
+	void run();
+
+	void add_before_send_cb(const callback::slot_type&);
+	void add_after_send_cb(const callback::slot_type&);
+
+private:
+	reader& reader_;
+	writer& writer_;
+	const size_t mps_;
+	callback before_send_cb_;
+	callback after_send_cb_;
 };
 
-#endif	/* READER_H */
+#endif	/* SYSLOG_BULK_UPLOADER_H */
 

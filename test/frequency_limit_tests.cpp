@@ -22,19 +22,30 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 
-#ifndef READER_H
-#define	READER_H
+#define BOOST_TEST_MODULE frequency_limit_tests
+#include <boost/test/unit_test.hpp>
+#include <boost/date_time/posix_time/posix_time.hpp>
+#include "../src/frequency_limit.h"
 
-#include <memory>
+using namespace boost::posix_time;
 
-class syslog_message;
+size_t count_in_loop(size_t freq, time_duration duration) {
+    frequency_limit f(freq);
+    ptime start(second_clock::local_time());
+    int c = 0;
+    while (second_clock::local_time() - start < duration) {
+        f();
+        c++;
+    }
+    return c;
+}
 
-class reader {
-public:
+BOOST_AUTO_TEST_CASE(test_slow) {
+    size_t c = count_in_loop(5, seconds(5));
+    BOOST_WARN_CLOSE((float) c, 25., 10.);
+}
 
-	virtual ~reader() {};
-	virtual std::unique_ptr<const syslog_message> next_message() = 0;
-};
-
-#endif	/* READER_H */
-
+BOOST_AUTO_TEST_CASE(test_fast) {
+    size_t c = count_in_loop(100, seconds(5));
+    BOOST_WARN_CLOSE((float) c, 500., 10.);
+}

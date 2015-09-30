@@ -27,70 +27,29 @@ SOFTWARE.
 
 #include <istream>
 
-class Severity;
+class severity;
 
-class Facility final {
+class facility final {
 public:
+	facility(const char*);
+	facility(const std::string&);
+	facility(std::istream&);
 
-    Facility(const char* src) : Facility(std::string(src)) {
-    };
+	facility() = delete;
+	~facility() = default;
+	facility(const facility&) = default;
+	facility(facility&&) = default;
+	facility& operator=(const facility&) = default;
+	facility& operator=(facility&&) = default;
 
-    Facility(const std::string& source) : _value(readFromString(source)) {
-    };
-
-    Facility(std::istream& source) : Facility(readFromStream(source)) {
-    };
-
-    Facility(const Facility& orig) : _value(orig._value) {
-    };
-
-    bool operator!=(const Facility& right) const {
-        bool result = !(*this == right); // Reuse equals operator
-        return result;
-    }
-
-    bool operator==(const Facility& right) const {
-        return _value == right._value;
-    }
-
-    friend std::ostream& operator<<(std::ostream& os, const Facility& obj) {
-        os << std::to_string(obj._value);
-        return os;
-    }
-
-    friend uint8_t operator+(const Facility& f, const Severity& s);
+	bool operator!=(const facility&) const;
+	bool operator==(const facility&) const;
 
 private:
+	const uint8_t _value;
 
-    const std::map<std::string, uint8_t> VALUES{
-        {"kern", 0},
-        {"user", 1},
-        {"mail", 2},
-        {"daemon", 3},
-        {"auth", 4},
-        {"syslog", 5},
-        {"lpr", 6},
-        {"news", 7},
-        {"uucp", 8},
-        {"clock", 9},
-        {"authpriv", 10},
-        {"ftp", 11},
-        {"ntp", 12},
-        {"logaudit", 13},
-        {"logalert", 14},
-        {"cron", 15},
-        {"local0", 16},
-        {"local1", 17},
-        {"local2", 18},
-        {"local3", 19},
-        {"local4", 20},
-        {"local5", 21},
-        {"local6", 22},
-        {"local7", 23}
-    };
-    const uint8_t _value;
-    std::string readFromStream(std::istream&);
-    uint8_t readFromString(const std::string&);
+	friend std::ostream& operator<<(std::ostream&, const facility&);
+	friend uint8_t operator+(const facility& f, const severity& s);
 };
 
 #endif	/* FACILITY_H */

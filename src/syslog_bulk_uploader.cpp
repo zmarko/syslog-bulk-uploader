@@ -22,19 +22,29 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 
-#ifndef READER_H
-#define	READER_H
+#include "syslog_bulk_uploader.h"
+#include "reader.h"
+#include "writer.h"
+#include "frequency_limit.h"
 
-#include <memory>
+syslog_bulk_uploader::syslog_bulk_uploader(reader& r, writer& w, const size_t mps)
+	: reader_(r), writer_(w), mps_(mps) {};
 
-class syslog_message;
+void syslog_bulk_uploader::run() {
+	frequency_limit freq_limit(mps_);
 
-class reader {
-public:
+	while (auto msg = reader_.next_message()) {
+		freq_limit();
+		before_send_cb_(*msg);
+		writer_.send(*msg);
+		after_send_cb_(*msg);
+	}
+}
 
-	virtual ~reader() {};
-	virtual std::unique_ptr<const syslog_message> next_message() = 0;
-};
+void syslog_bulk_uploader::add_before_send_cb(const callback::slot_type& cb) {
+	before_send_cb_.connect(cb);
+}
 
-#endif	/* READER_H */
-
+void syslog_bulk_uploader::add_after_send_cb(const callback::slot_type& cb) {
+	after_send_cb_.connect(cb);
+}

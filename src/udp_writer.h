@@ -22,43 +22,24 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 
-#ifndef SYSLOGBULKUPLOADER_H
-#define	SYSLOGBULKUPLOADER_H
+#ifndef UDP_WRITER_H
+#define	UDP_WRITER_H
 
-#include <boost/noncopyable.hpp>
-#include <functional>
 #include <memory>
+#include <boost/asio.hpp>
+#include "writer.h"
 
-class Reader;
-class Writer;
-class SyslogMessage;
-
-class SyslogBulkUploader final : boost::noncopyable {
+class udp_writer final : public writer {
 public:
 
-    typedef std::function<void(const SyslogMessage&)> Callback;
+    udp_writer(const std::string&, const uint16_t);
 
-    SyslogBulkUploader(Reader& reader, Writer& writer, const size_t& mps = DEFAULT_MPS) : _reader(reader),
-    _writer(writer), _mps(mps) {
-    };
-    void run();
-
-    void setPreSendCallback(Callback cb) {
-        _preSendCallback = cb;
-    }
-
-    void setPostSendCallback(Callback cb) {
-        _postSendCallback = cb;
-    }
+    virtual void send(const syslog_message&) override;
 
 private:
-    const static size_t DEFAULT_MPS = 1000;
-    Reader& _reader;
-    Writer& _writer;
-    const size_t _mps;
-    Callback _preSendCallback;
-    Callback _postSendCallback;
+    boost::asio::io_service ios_;
+    boost::asio::ip::udp::socket socket_{ios_};
 };
 
-#endif	/* SYSLOGBULKUPLOADER_H */
+#endif	/* UDP_WRITER_H */
 

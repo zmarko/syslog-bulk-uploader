@@ -25,55 +25,23 @@ SOFTWARE.
 #ifndef SEVERITY_H
 #define	SEVERITY_H
 
-class Facility;
+class facility;
 
-class Severity final {
+class severity final {
 public:
+	severity(const std::string&);
+	severity(const char*);
+	severity(std::istream&);
+	severity(const severity&);
 
-    Severity(const std::string& src) : _value(readFromString(src)) {
-    };
+	bool operator!=(const severity&) const;
+	bool operator==(const severity&) const;
 
-    Severity(const char* src) : Severity(std::string(src)) {
-    };
-
-    Severity(std::istream& source) : Severity(readFromStream(source)) {
-    };
-
-    Severity(const Severity& orig) : _value(orig._value) {
-    };
-
-    bool operator!=(const Severity& right) const {
-        bool result = !(*this == right); // Reuse equals operator
-        return result;
-    }
-
-    bool operator==(const Severity& right) const {
-        return _value == right._value;
-    }
-
-    friend uint8_t operator+(const Facility& f, const Severity& s);
-
-    friend std::ostream& operator<<(std::ostream& os, const Severity& obj) {
-        os << std::to_string(obj._value);
-        return os;
-    }
+	friend uint8_t operator+(const facility&, const severity&);
+	friend std::ostream& operator<<(std::ostream&, const severity&);
 
 private:
-
-    const std::map<std::string, uint8_t> VALUES{
-        {"emergency", 0},
-        {"alert", 1},
-        {"critical", 2},
-        {"error", 3},
-        {"warning", 4},
-        {"notice", 5},
-        {"informational", 6},
-        {"debug", 7}
-    };
-
-    const uint8_t _value;
-    std::string readFromStream(std::istream& source);
-    uint8_t readFromString(const std::string& src);
+	const uint8_t _value;
 };
 
 #endif	/* SEVERITY_H */

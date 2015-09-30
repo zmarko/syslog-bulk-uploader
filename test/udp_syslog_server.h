@@ -22,34 +22,33 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 
-#ifndef FILEREADER_H
-#define	FILEREADER_H
+#ifndef UDP_SYSLOG_SERVER_H
+#define	UDP_SYSLOG_SERVER_H
 
-#include <fstream>
-#include "Reader.h"
-#include "SyslogMessage.h"
+#include <iostream>
+#include <string>
+#include <boost/array.hpp>
+#include <boost/bind.hpp>
+#include <boost/asio.hpp>
+#include <boost/date_time/posix_time/posix_time.hpp>
 
-class FileReader final : public Reader {
+class udp_syslog_server {
 public:
-
-    FileReader(const std::string& filename) : _stream(filename) {
-        if (!_stream.is_open()) {
-            throw "File not found: " + filename;
-        }
-    }
-
-    virtual std::unique_ptr<const SyslogMessage> nextMessage() override {
-        std::unique_ptr<const SyslogMessage> ret;
-        if (_stream.is_open() && !_stream.eof() && !_stream.fail()) {
-            ret.reset(new SyslogMessage(_stream));
-            for (auto c = _stream.peek(); c == '\n' || c == '\r'; _stream.get(), c = _stream.peek());
-        }
-        return ret;
-    }
+	udp_syslog_server(boost::asio::io_service&, const int, const int);
+	const std::vector<std::string>& messages() const;
 
 private:
-    std::ifstream _stream;
+	void receive();
+	void receive_handler(const boost::system::error_code&, std::size_t);
+	void deadline_handler();
+
+	boost::asio::ip::udp::socket socket_;
+	boost::asio::ip::udp::endpoint peer_;
+	boost::array<char, 1024> buffer_;
+	std::vector<std::string> messages_;
+	boost::asio::deadline_timer dt_;
+	const int timeout_;
 };
 
-#endif	/* FILEREADER_H */
+#endif	/* UDP_SYSLOG_SERVER_H */
 

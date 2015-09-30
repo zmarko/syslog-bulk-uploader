@@ -26,15 +26,13 @@ SOFTWARE.
 #ifndef WRITER_H
 #define	WRITER_H
 
-#include <boost/noncopyable.hpp>
-#include "SyslogMessage.h"
+#include "syslog_message.h"
 
-class Writer : private boost::noncopyable {
+class writer {
 public:
 
-    virtual ~Writer() {
-    };
-    virtual void sendMessage(const SyslogMessage&) = 0;
+	virtual ~writer() {};
+	virtual void send(const syslog_message&) = 0;
 };
 
 #endif	/* WRITER_H */

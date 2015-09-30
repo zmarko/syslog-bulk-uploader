@@ -11,8 +11,8 @@ include_directories(
 )
 #add_definitions(-DBOOST_TEST_DYN_LINK)
 
-add_executable(SyslogBulkUploaderTests SyslogBulkUploaderTests.cpp)
-target_link_libraries(SyslogBulkUploaderTests
+add_executable(syslog_bulk_uploader_tests syslog_bulk_uploader_tests.cpp udp_syslog_server.cpp)
+target_link_libraries(syslog_bulk_uploader_tests
         slbu-lib
         ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
         ${Boost_DATE_TIME_LIBRARY}
@@ -22,40 +22,40 @@ target_link_libraries(SyslogBulkUploaderTests
         ${Boost_THREAD_LIBRARY}
 )
 if(WIN32)
-    target_link_libraries(SyslogBulkUploaderTests
+    target_link_libraries(syslog_bulk_uploader_tests
         ${Boost_REGEX_LIBRARY}
         ${Boost_CHRONO_LIBRARY}
     )
 endif()
 
-add_executable(SyslogMessageTests SyslogMessageTests.cpp)
-target_link_libraries(SyslogMessageTests
+add_executable(syslog_message_tests syslog_message_tests.cpp)
+target_link_libraries(syslog_message_tests
         slbu-lib
         ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
         ${Boost_DATE_TIME_LIBRARY}
 )
 if(WIN32)
-    target_link_libraries(SyslogMessageTests
+    target_link_libraries(syslog_message_tests
         ${Boost_REGEX_LIBRARY}
         ${Boost_CHRONO_LIBRARY}
     )
 endif()
 
-add_executable(RFC3164FormattedSyslogMessageTests RFC3164FormattedSyslogMessageTests.cpp)
-target_link_libraries(RFC3164FormattedSyslogMessageTests
+add_executable(RFC3164_fmt_tests RFC3164_fmt_tests.cpp)
+target_link_libraries(RFC3164_fmt_tests
         slbu-lib
         ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
         ${Boost_DATE_TIME_LIBRARY}
 )
 if(WIN32)
-    target_link_libraries(RFC3164FormattedSyslogMessageTests
+    target_link_libraries(RFC3164_fmt_tests
         ${Boost_REGEX_LIBRARY}
         ${Boost_CHRONO_LIBRARY}
     )
 endif()
 
-add_executable(FrequencyLimitTests FrequencyLimitTests.cpp)
-target_link_libraries(FrequencyLimitTests
+add_executable(frequency_limit_tests frequency_limit_tests.cpp)
+target_link_libraries(frequency_limit_tests
         slbu-lib
         ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
         ${Boost_DATE_TIME_LIBRARY}
@@ -64,7 +64,7 @@ target_link_libraries(FrequencyLimitTests
 		${CMAKE_THREAD_LIBS_INIT}
 )
 if(WIN32)
-    target_link_libraries(FrequencyLimitTests
+    target_link_libraries(frequency_limit_tests
         ${Boost_REGEX_LIBRARY}
         ${Boost_CHRONO_LIBRARY}
     )

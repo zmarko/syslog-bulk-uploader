@@ -22,36 +22,39 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 
-#ifndef RFC3164FORMATTEDSYSLOGMESSAGE_H
-#define	RFC3164FORMATTEDSYSLOGMESSAGE_H
+#ifndef FREQUENCY_LIMIT_H
+#define	FREQUENCY_LIMIT_H
 
-#include "SyslogMessage.h"
+#include <boost/date_time/posix_time/posix_time.hpp>
+#include <boost/thread/thread.hpp>
 
-class RFC3164FormattedSyslogMessage final {
+class frequency_limit final {
 public:
 
-    RFC3164FormattedSyslogMessage(const SyslogMessage& msg) : _message(msg) {
-    };
+	frequency_limit(const size_t& limit)
+		: target_latency(boost::posix_time::microseconds(1000000 / limit)),
+		delay(boost::posix_time::milliseconds(0)) {};
 
-    const std::string operator()() {
-        std::stringstream stream;
-        stream.imbue(std::locale(std::locale::classic(), new boost::posix_time::time_facet("%b %e %H:%M:%S")));
-        stream.str("");
-        stream << "<" << std::to_string(_message.priority()) << ">";
-        stream << _message.timestamp() << " ";
-        stream << _message.source() << " ";
-        stream << _message.message();
-        std::string ret = stream.str();
-        if (ret.size() > MAX_LEN) {
-            ret = ret.substr(0, MAX_LEN);
-        }
-        return ret;
-    };
+	void operator()() {
+		auto now(boost::posix_time::microsec_clock::local_time());
+		if (prev_ts == boost::posix_time::not_a_date_time) {
+			prev_ts = now;
+		} else {
+			auto latency = now - prev_ts;
+			auto diff = target_latency - latency;
+			delay = delay + diff;
+			if (diff > boost::posix_time::microseconds(0)) {
+				boost::this_thread::sleep(delay);
+			}
+			prev_ts = now;
+		}
+	};
 
 private:
-    static const size_t MAX_LEN = 1024;
-    const SyslogMessage& _message;
+	const boost::posix_time::time_duration target_latency;
+	boost::posix_time::time_duration delay;
+	boost::posix_time::ptime prev_ts;
 };
 
-#endif	/* RFC3164FORMATTEDSYSLOGMESSAGE_H */
+#endif	/* FREQUENCY_LIMIT_H */
 

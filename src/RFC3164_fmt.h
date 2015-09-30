@@ -22,24 +22,21 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 
-#ifndef UDPWRITER_H
-#define	UDPWRITER_H
+#ifndef RFC3164_FMT_H
+#define	RFC3164_FMT_H
 
-#include <memory>
-#include <boost/asio.hpp>
-#include "Writer.h"
+#include "syslog_message.h"
 
-class UDPWriter final : public Writer {
+class RFC3164_fmt final {
 public:
 
-    UDPWriter(const std::string&, const uint16_t);
+	RFC3164_fmt(const syslog_message& msg) : message_(msg) {};
 
-    virtual void sendMessage(const SyslogMessage&) override;
+	const std::string operator()();
 
 private:
-    boost::asio::io_service _ios;
-    boost::asio::ip::udp::socket _socket{_ios};
+	const syslog_message& message_;
 };
 
-#endif	/* UDPWRITER_H */
+#endif	/* RFC3164_FMT_H */
 

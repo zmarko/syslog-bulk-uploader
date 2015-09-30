@@ -22,25 +22,42 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 
-#include "../src/SyslogMessage.h"
-#define BOOST_TEST_MODULE SyslogMessageTests
-#include <boost/test/unit_test.hpp>
+#ifndef SYSLOG_MESSAGE_H
+#define	SYSLOG_MESSAGE_H
+
 #include <boost/date_time/posix_time/posix_time.hpp>
 
-BOOST_AUTO_TEST_CASE(parsing) {
-    std::stringstream source("2015-09-02 13:33:11     Local4.Critical 192.168.0.1     Kiwi_Syslog_Server %ASA-2-106007: Deny inbound UDP from 1.2.3.4/22084 to 4.3.2.1/53 due to DNS Query");
-    boost::posix_time::ptime timestamp(boost::posix_time::time_from_string("2015-09-02 13:33:11"));
-    SyslogMessage m(source);
-    BOOST_CHECK_EQUAL(m.timestamp(), timestamp);
-    BOOST_CHECK_EQUAL(m.facility(), Facility("Local4"));
-    BOOST_CHECK_EQUAL(m.severity(), Severity("Critical"));
-    BOOST_CHECK_EQUAL(m.source(), "192.168.0.1");
-    BOOST_CHECK_EQUAL(m.message(), "Kiwi_Syslog_Server %ASA-2-106007: Deny inbound UDP from 1.2.3.4/22084 to 4.3.2.1/53 due to DNS Query");
-}
+#include "facility.h"
+#include "severity.h"
 
-BOOST_AUTO_TEST_CASE(invalid_params) {
-    BOOST_CHECK_THROW(Facility("invalid"), std::string);
-    BOOST_CHECK_THROW(Severity("invalid"), std::string);
-    BOOST_CHECK_NO_THROW(Facility("Local0"));
-    BOOST_CHECK_NO_THROW(Severity("Critical"));
-}
+class syslog_message final {
+public:
+
+	syslog_message() = delete;
+	syslog_message(std::istream&);
+	syslog_message(const syslog_message&) = default;
+	syslog_message(syslog_message&&) = default;
+	syslog_message& operator=(const syslog_message&) = default;
+	syslog_message& operator=(syslog_message&&) = default;
+	~syslog_message() = default;
+
+	const boost::posix_time::ptime timestamp() const;
+	const facility fac() const;
+	const severity sev() const;
+	const std::string source() const;
+	const std::string message() const;
+	const uint8_t priority() const;
+
+private:
+	const boost::posix_time::ptime timestamp_;
+	const facility facility_;
+	const severity severity_;
+	const std::string source_;
+	const std::string message_;
+};
+
+std::ostream& operator<<(std::ostream& os, const syslog_message& obj);
+
+
+#endif	/* SYSLOG_MESSAGE_H */
+
