@@ -94,7 +94,7 @@ syslog_message::syslog_message(istream& src)
 	facility_(read_facility(src)),
 	severity_(read_severity(src)),
 	source_(read_source(src)),
-	message_(read_message(src)) {};
+	message_(read_message(src)) {}
 
 const posix_time::ptime syslog_message::timestamp() const {
 	return timestamp_;
@@ -116,9 +116,9 @@ const std::string syslog_message::message() const {
 	return message_;
 }
 
-const uint8_t syslog_message::priority() const {
+uint8_t syslog_message::priority() const {
 	return facility_ + severity_;
-};
+}
 
 uint8_t operator+(const facility& f, const severity& s) {
 	return f.value_ * 8 + s.value_;

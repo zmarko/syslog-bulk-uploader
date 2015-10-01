@@ -24,27 +24,44 @@ SOFTWARE.
 
 #include <boost/algorithm/string.hpp>
 #include <map>
-#include "severity.h"
+#include "facility.h"
 
 using namespace std;
+using namespace boost;
 
 namespace {
-	const map<string, uint8_t> severity_strings{
-		{ "emergency", 0 },
-		{ "alert", 1 },
-		{ "critical", 2 },
-		{ "error", 3 },
-		{ "warning", 4 },
-		{ "notice", 5 },
-		{ "informational", 6 },
-		{ "debug", 7 }
+	const map<string, uint8_t> facility_strings{
+		{ "kern", 0 },
+		{ "user", 1 },
+		{ "mail", 2 },
+		{ "daemon", 3 },
+		{ "auth", 4 },
+		{ "syslog", 5 },
+		{ "lpr", 6 },
+		{ "news", 7 },
+		{ "uucp", 8 },
+		{ "clock", 9 },
+		{ "authpriv", 10 },
+		{ "ftp", 11 },
+		{ "ntp", 12 },
+		{ "logaudit", 13 },
+		{ "logalert", 14 },
+		{ "cron", 15 },
+		{ "local0", 16 },
+		{ "local1", 17 },
+		{ "local2", 18 },
+		{ "local3", 19 },
+		{ "local4", 20 },
+		{ "local5", 21 },
+		{ "local6", 22 },
+		{ "local7", 23 }
 	};
 
 	string read_from_stream(istream& src) {
 		string ret;
 		while (src) {
 			auto c = src.get();
-			if (c == ' ' || c == '\t') {
+			if (c == '.') {
 				break;
 			} else {
 				ret.push_back(c);
@@ -54,28 +71,30 @@ namespace {
 	}
 
 	uint8_t read_from_string(const string& src) {
-		const auto& value = severity_strings.find(boost::algorithm::to_lower_copy(src));
-		if (value != severity_strings.end()) {
+		const auto& value = facility_strings.find(to_lower_copy(src));
+		if (value != facility_strings.end()) {
 			return value->second;
 		} else {
-			throw "illegal severity: " + src;
+			throw "illegal facility value: " + src;
 		}
 	}
 }
 
-severity::severity(const string& src) : value_(read_from_string(src)) {};
-severity::severity(const char* src) : severity(string(src)) {};
-severity::severity(istream& source) : severity(read_from_stream(source)) {};
+facility::facility(const char* src) : facility(string(src)) {}
+facility::facility(const string& source) : value_(read_from_string(source)) {}
+facility::facility(istream& source) : facility(read_from_stream(source)) {}
 
-bool severity::operator!=(const severity& right) const {
+bool facility::operator!=(const facility& right) const {
 	return !(*this == right);
 }
 
-bool severity::operator==(const severity& right) const {
+bool facility::operator==(const facility& right) const {
 	return value_ == right.value_;
 }
 
-std::ostream& operator<<(std::ostream& os, const severity& obj) {
+std::ostream& operator<<(std::ostream& os, const facility& obj) {
 	os << to_string(obj.value_);
 	return os;
 }
+
+

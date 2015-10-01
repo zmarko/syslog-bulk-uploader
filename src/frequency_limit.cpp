@@ -26,7 +26,7 @@ SOFTWARE.
 
 frequency_limit::frequency_limit(const size_t& limit)
 	: target_latency_(boost::posix_time::microseconds(1000000 / limit)),
-	delay_(boost::posix_time::milliseconds(0)) {};
+	delay_(boost::posix_time::milliseconds(0)) {}
 
 void frequency_limit::operator()() {
 	auto now(boost::posix_time::microsec_clock::local_time());
@@ -41,4 +41,4 @@ void frequency_limit::operator()() {
 		}
 		prev_ts_ = now;
 	}
-};
+}
