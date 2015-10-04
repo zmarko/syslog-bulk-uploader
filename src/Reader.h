@@ -27,13 +27,13 @@ SOFTWARE.
 
 #include <memory>
 
-class syslog_message;
+class Syslog_message;
 
-class reader {
+class Reader {
 public:
 
-	virtual ~reader() {};
-	virtual std::unique_ptr<const syslog_message> next_message() = 0;
+	virtual ~Reader() {};
+	virtual std::unique_ptr<const Syslog_message> next_message() = 0;
 };
 
 #endif	/* READER_H */

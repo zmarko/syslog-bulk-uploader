@@ -25,17 +25,19 @@ SOFTWARE.
 #ifndef RFC3164_FMT_H
 #define	RFC3164_FMT_H
 
-#include "syslog_message.h"
+#include <string>
+
+class Syslog_message;
 
 class RFC3164_fmt final {
 public:
 
-	explicit RFC3164_fmt(const syslog_message& msg) : message_(msg) {};
+	explicit RFC3164_fmt(const Syslog_message&);
 
 	const std::string operator()();
 
 private:
-	const syslog_message& message_;
+	const Syslog_message& message_;
 };
 
 #endif	/* RFC3164_FMT_H */

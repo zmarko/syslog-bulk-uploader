@@ -25,31 +25,32 @@ SOFTWARE.
 #ifndef FACILITY_H
 #define	FACILITY_H
 
-#include <istream>
+#include <iosfwd>
+#include <string>
 
-class severity;
+class Severity;
 
-class facility final {
+class Facility final {
 public:
-	explicit facility(const char*);
-	explicit facility(const std::string&);
-	explicit facility(std::istream&);
+	explicit Facility(const char*);
+	explicit Facility(const std::string&);
+	explicit Facility(std::istream&);
 
-	facility() = delete;
-	~facility() = default;
-	facility(const facility&) = default;
-	facility(facility&&) = default;
-	facility& operator=(const facility&) = default;
-	facility& operator=(facility&&) = default;
+	Facility() = delete;
+	~Facility() = default;
+	Facility(const Facility&) = default;
+	Facility(Facility&&) = default;
+	Facility& operator=(const Facility&) = default;
+	Facility& operator=(Facility&&) = default;
 
-	bool operator!=(const facility&) const;
-	bool operator==(const facility&) const;
+	bool operator!=(const Facility&) const;
+	bool operator==(const Facility&) const;
 
 private:
 	const uint8_t value_;
 
-	friend std::ostream& operator<<(std::ostream&, const facility&);
-	friend uint8_t operator+(const facility& f, const severity& s);
+	friend std::ostream& operator<<(std::ostream&, const Facility&);
+	friend uint8_t operator+(const Facility& f, const Severity& s);
 };
 
 #endif	/* FACILITY_H */

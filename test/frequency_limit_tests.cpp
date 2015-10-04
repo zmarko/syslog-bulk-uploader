@@ -25,12 +25,12 @@ SOFTWARE.
 #define BOOST_TEST_MODULE frequency_limit_tests
 #include <boost/test/unit_test.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
-#include "../src/frequency_limit.h"
+#include "../src/Frequency_limit.h"
 
 using namespace boost::posix_time;
 
 size_t count_in_loop(size_t freq, time_duration duration) {
-    frequency_limit f(freq);
+    Frequency_limit f(freq);
     ptime start(second_clock::local_time());
     int c = 0;
     while (second_clock::local_time() - start < duration) {

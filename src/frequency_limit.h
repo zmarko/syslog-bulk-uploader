@@ -28,9 +28,9 @@ SOFTWARE.
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/thread/thread.hpp>
 
-class frequency_limit final {
+class Frequency_limit final {
 public:
-	explicit frequency_limit(const size_t&);
+	explicit Frequency_limit(const size_t&);
 	void operator()();
 
 private:

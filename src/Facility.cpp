@@ -24,7 +24,7 @@ SOFTWARE.
 
 #include <boost/algorithm/string.hpp>
 #include <map>
-#include "facility.h"
+#include "Facility.h"
 
 using namespace std;
 using namespace boost;
@@ -80,19 +80,19 @@ namespace {
 	}
 }
 
-facility::facility(const char* src) : facility(string(src)) {};
-facility::facility(const string& source) : value_(read_from_string(source)) {};
-facility::facility(istream& source) : facility(read_from_stream(source)) {};
+Facility::Facility(const char* src) : Facility(string(src)) {};
+Facility::Facility(const string& source) : value_(read_from_string(source)) {};
+Facility::Facility(istream& source) : Facility(read_from_stream(source)) {};
 
-bool facility::operator!=(const facility& right) const {
+bool Facility::operator!=(const Facility& right) const {
 	return !(*this == right);
 }
 
-bool facility::operator==(const facility& right) const {
+bool Facility::operator==(const Facility& right) const {
 	return value_ == right.value_;
 }
 
-std::ostream& operator<<(std::ostream& os, const facility& obj) {
+std::ostream& operator<<(std::ostream& os, const Facility& obj) {
 	os << to_string(obj.value_);
 	return os;
 }

@@ -22,14 +22,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 
-#include <string>
-#include "udp_writer.h"
+#include "Syslog_message.h"
+#include "Udp_writer.h"
 #include "RFC3164_fmt.h"
 
 using boost::asio::ip::udp;
 using namespace boost::asio;
 
-udp_writer::udp_writer(const std::string& destination, const uint16_t port) {
+Udp_writer::Udp_writer(const std::string& destination, const uint16_t port) {
     udp::resolver resolver(ios_);
     udp::resolver::query query(destination, std::to_string(port));
     udp::resolver::iterator it = resolver.resolve(query);
@@ -41,7 +41,7 @@ udp_writer::udp_writer(const std::string& destination, const uint16_t port) {
     }
 }
 
-void udp_writer::send(const syslog_message& message) {
+void Udp_writer::write(const Syslog_message& message) {
     if (socket_.is_open()) {
         auto fmt_msg = RFC3164_fmt{message};
         auto fmt_str = fmt_msg();

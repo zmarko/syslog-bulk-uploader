@@ -22,7 +22,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include "udp_syslog_server.h"
+#include <boost/asio/placeholders.hpp>
+#include <boost/bind.hpp>
+
+#include "Udp_syslog_server.h"
 
 using boost::asio::ip::udp;
 using namespace std;
@@ -30,26 +33,26 @@ using namespace boost::asio;
 using namespace boost::posix_time;
 using namespace boost;
 
-udp_syslog_server::udp_syslog_server(io_service& ios, const int port, const int timeout)
+Udp_syslog_server::Udp_syslog_server(io_service& ios, const int port, const int timeout)
 	: socket_(ios, udp::endpoint(udp::v4(), port)), dt_(ios), timeout_(timeout) {
 	deadline_handler();
 	receive();
 }
 
-const vector<string>& udp_syslog_server::messages() const {
+const vector<string>& Udp_syslog_server::messages() const {
 	return messages_;
 }
 
-void udp_syslog_server::receive() {
+void Udp_syslog_server::receive() {
 	dt_.expires_from_now(milliseconds(timeout_));
 	socket_.async_receive_from(
 		buffer(buffer_), peer_,
-		bind(&udp_syslog_server::receive_handler, this,
+		bind(&Udp_syslog_server::receive_handler, this,
 			asio::placeholders::error,
 			asio::placeholders::bytes_transferred));
 }
 
-void udp_syslog_server::receive_handler(const system::error_code& error, size_t len) {
+void Udp_syslog_server::receive_handler(const system::error_code& error, size_t len) {
 	if (!error || error == asio::error::message_size) {
 		if (len > 0) {
 			string s(buffer_.data(), len);
@@ -59,12 +62,12 @@ void udp_syslog_server::receive_handler(const system::error_code& error, size_t 
 	}
 }
 
-void udp_syslog_server::deadline_handler() {
+void Udp_syslog_server::deadline_handler() {
 	auto delta = deadline_timer::traits_type::now() - dt_.expires_at();
 	if (delta != not_a_date_time && delta >= milliseconds(0)) {
 		socket_.cancel();
 		dt_.expires_at(posix_time::pos_infin);
 	}
 
-	dt_.async_wait(bind(&udp_syslog_server::deadline_handler, this));
+	dt_.async_wait(bind(&Udp_syslog_server::deadline_handler, this));
 }

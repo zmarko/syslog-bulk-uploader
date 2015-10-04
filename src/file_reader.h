@@ -26,13 +26,15 @@ SOFTWARE.
 #define	FILE_READER_H
 
 #include <fstream>
-#include "reader.h"
-#include "syslog_message.h"
+#include <string>
+#include "Reader.h"
 
-class file_reader final : public reader {
+class Syslog_message;
+
+class File_reader final : public Reader {
 public:
-	explicit file_reader(const std::string&);
-	virtual std::unique_ptr<const syslog_message> next_message() override;
+	explicit File_reader(const std::string&);
+	virtual std::unique_ptr<const Syslog_message> next_message() override;
 
 private:
 	std::ifstream stream_;

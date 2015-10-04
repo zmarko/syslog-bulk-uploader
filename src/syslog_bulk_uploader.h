@@ -27,27 +27,27 @@ SOFTWARE.
 
 #include <boost/noncopyable.hpp>
 #include <boost/signals2.hpp>
-#include <memory>
 
-class reader;
-class writer;
-class syslog_message;
+class Reader;
+class Writer;
+class Syslog_message;
 
-class syslog_bulk_uploader final : boost::noncopyable {
+class Syslog_bulk_uploader final : boost::noncopyable {
 public:
-	syslog_bulk_uploader(reader&, writer&, const size_t = 1000);
-	void run();
+	using Callback = boost::signals2::signal<void(const Syslog_message&)>;
 
-	using callback = boost::signals2::signal<void(const syslog_message&)>;
-	void add_before_send_cb(const callback::slot_type&);
-	void add_after_send_cb(const callback::slot_type&);
+	Syslog_bulk_uploader(Reader&, Writer&, const size_t = 1000);
+
+	void run();
+	void add_before_send_cb(const Callback::slot_type&);
+	void add_after_send_cb(const Callback::slot_type&);
 
 private:
-	reader& reader_;
-	writer& writer_;
+	Reader& reader_;
+	Writer& writer_;
 	const size_t mps_;
-	callback before_send_cb_;
-	callback after_send_cb_;
+	Callback before_send_cb_;
+	Callback after_send_cb_;
 };
 
 #endif	/* SYSLOG_BULK_UPLOADER_H */

@@ -23,12 +23,16 @@ SOFTWARE.
 */
 
 #include "RFC3164_fmt.h"
+#include "Syslog_message.h"
 
 using namespace std;
 
 namespace {
-	const int MAX_LEN = 1024;
+	const int max_msg_len = 1024;
 }
+
+RFC3164_fmt::RFC3164_fmt(const Syslog_message& m)
+	: message_{ m } {};
 
 const string RFC3164_fmt::operator()() {
 	stringstream stream;
@@ -38,8 +42,8 @@ const string RFC3164_fmt::operator()() {
 		<< message_.source() << " "
 		<< message_.message();
 	string ret = stream.str();
-	if (ret.size() > MAX_LEN) {
-		ret = ret.substr(0, MAX_LEN);
+	if (ret.size() > max_msg_len) {
+		ret = ret.substr(0, max_msg_len);
 	}
 	return ret;
 };

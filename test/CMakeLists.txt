@@ -11,7 +11,7 @@ include_directories(
 )
 #add_definitions(-DBOOST_TEST_DYN_LINK)
 
-add_executable(syslog_bulk_uploader_tests syslog_bulk_uploader_tests.cpp udp_syslog_server.cpp)
+add_executable(syslog_bulk_uploader_tests syslog_bulk_uploader_tests.cpp Udp_syslog_server.cpp)
 target_link_libraries(syslog_bulk_uploader_tests
         slbu-lib
         ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}

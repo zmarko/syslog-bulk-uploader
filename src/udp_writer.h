@@ -25,16 +25,17 @@ SOFTWARE.
 #ifndef UDP_WRITER_H
 #define	UDP_WRITER_H
 
-#include <memory>
-#include <boost/asio.hpp>
-#include "writer.h"
+#include <boost/asio/io_service.hpp>
+#include <boost/asio/ip/udp.hpp>
+#include <string>
+#include "Writer.h"
 
-class udp_writer final : public writer {
+class Udp_writer final : public Writer {
 public:
 
-    udp_writer(const std::string&, const uint16_t);
+    Udp_writer(const std::string&, const uint16_t);
 
-    virtual void send(const syslog_message&) override;
+    virtual void write(const Syslog_message&) override;
 
 private:
     boost::asio::io_service ios_;

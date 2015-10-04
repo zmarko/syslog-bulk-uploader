@@ -25,16 +25,16 @@ SOFTWARE.
 #ifndef UDP_SYSLOG_SERVER_H
 #define	UDP_SYSLOG_SERVER_H
 
-#include <iostream>
-#include <string>
 #include <boost/array.hpp>
-#include <boost/bind.hpp>
-#include <boost/asio.hpp>
-#include <boost/date_time/posix_time/posix_time.hpp>
+#include <boost/asio/io_service.hpp>
+#include <boost/asio/deadline_timer.hpp>
+#include <boost/asio/ip/udp.hpp>
+#include <string>
+#include <vector>
 
-class udp_syslog_server {
+class Udp_syslog_server {
 public:
-	udp_syslog_server(boost::asio::io_service&, const int, const int);
+	Udp_syslog_server(boost::asio::io_service&, const int, const int);
 	const std::vector<std::string>& messages() const;
 
 private:

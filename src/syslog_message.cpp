@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 
-#include "syslog_message.h"
+#include "Syslog_message.h"
 
 using namespace std;
 using namespace boost;
@@ -58,13 +58,13 @@ namespace {
 		return posix_time::time_from_string(ts);
 	}
 
-	const facility read_facility(istream& src) {
+	const Facility read_facility(istream& src) {
 		skip_whitespace(src);
-		return facility(src);
+		return Facility(src);
 	}
 
-	const severity read_severity(istream& src) {
-		return severity(src);
+	const Severity read_severity(istream& src) {
+		return Severity(src);
 	}
 
 	const string read_source(istream& src) {
@@ -89,42 +89,42 @@ namespace {
 	}
 }
 
-syslog_message::syslog_message(istream& src)
+Syslog_message::Syslog_message(istream& src)
 	: timestamp_(read_timestamp(src)),
 	facility_(read_facility(src)),
 	severity_(read_severity(src)),
 	source_(read_source(src)),
 	message_(read_message(src)) {};
 
-const posix_time::ptime syslog_message::timestamp() const {
+const posix_time::ptime Syslog_message::timestamp() const {
 	return timestamp_;
 }
 
-const facility syslog_message::fac() const {
+const Facility Syslog_message::fac() const {
 	return facility_;
 }
 
-const severity syslog_message::sev() const {
+const Severity Syslog_message::sev() const {
 	return severity_;
 }
 
-const std::string syslog_message::source() const {
+const std::string Syslog_message::source() const {
 	return source_;
 }
 
-const std::string syslog_message::message() const {
+const std::string Syslog_message::message() const {
 	return message_;
 }
 
-const uint8_t syslog_message::priority() const {
+const uint8_t Syslog_message::priority() const {
 	return facility_ + severity_;
 };
 
-uint8_t operator+(const facility& f, const severity& s) {
+uint8_t operator+(const Facility& f, const Severity& s) {
 	return f.value_ * 8 + s.value_;
 }
 
-ostream& operator<<(std::ostream& os, const syslog_message& obj) {
+ostream& operator<<(std::ostream& os, const Syslog_message& obj) {
 	os << "syslog_message{timestamp_:" << obj.timestamp() << ", facility:" << obj.fac()
 		<< ", severity:" << obj.sev() << ", source:" << obj.source() << ", message:" << obj.message() << "}";
 	return os;

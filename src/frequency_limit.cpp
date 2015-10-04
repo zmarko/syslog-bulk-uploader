@@ -22,13 +22,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include "frequency_limit.h"
+#include "Frequency_limit.h"
 
-frequency_limit::frequency_limit(const size_t& limit)
+Frequency_limit::Frequency_limit(const size_t& limit)
 	: target_latency_(boost::posix_time::microseconds(1000000 / limit)),
 	delay_(boost::posix_time::milliseconds(0)) {};
 
-void frequency_limit::operator()() {
+void Frequency_limit::operator()() {
 	auto now(boost::posix_time::microsec_clock::local_time());
 	if (prev_ts_ == boost::posix_time::not_a_date_time) {
 		prev_ts_ = now;

@@ -22,20 +22,21 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include "file_reader.h"
+#include "File_reader.h"
+#include "syslog_message.h"
 
 using namespace std;
 
-file_reader::file_reader(const string& filename) : stream_(filename) {
+File_reader::File_reader(const string& filename) : stream_(filename) {
 	if (!stream_.is_open()) {
 		throw "error opening file: " + filename;
 	}
 }
 
-unique_ptr<const syslog_message> file_reader::next_message() {
-	unique_ptr<const syslog_message> ret;
+unique_ptr<const Syslog_message> File_reader::next_message() {
+	unique_ptr<const Syslog_message> ret;
 	if (stream_.is_open() && !stream_.eof() && !stream_.fail()) {
-		ret.reset(new syslog_message(stream_));
+		ret = make_unique<Syslog_message>(stream_);
 		for (auto c = stream_.peek(); c == '\n' || c == '\r'; stream_.get(), c = stream_.peek());
 	}
 	return ret;

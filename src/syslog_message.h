@@ -26,37 +26,39 @@ SOFTWARE.
 #define	SYSLOG_MESSAGE_H
 
 #include <boost/date_time/posix_time/posix_time.hpp>
+#include <iosfwd>
+#include <string>
 
-#include "facility.h"
-#include "severity.h"
+#include "Facility.h"
+#include "Severity.h"
 
-class syslog_message final {
+class Syslog_message final {
 public:
-	explicit syslog_message(std::istream&);
+	explicit Syslog_message(std::istream&);
 
-	syslog_message() = delete;
-	syslog_message(const syslog_message&) = default;
-	syslog_message(syslog_message&&) = default;
-	syslog_message& operator=(const syslog_message&) = default;
-	syslog_message& operator=(syslog_message&&) = default;
-	~syslog_message() = default;
+	Syslog_message() = delete;
+	Syslog_message(const Syslog_message&) = default;
+	Syslog_message(Syslog_message&&) = default;
+	Syslog_message& operator=(const Syslog_message&) = default;
+	Syslog_message& operator=(Syslog_message&&) = default;
+	~Syslog_message() = default;
 
 	const boost::posix_time::ptime timestamp() const;
-	const facility fac() const;
-	const severity sev() const;
+	const Facility fac() const;
+	const Severity sev() const;
 	const std::string source() const;
 	const std::string message() const;
 	const uint8_t priority() const;
 
 private:
 	const boost::posix_time::ptime timestamp_;
-	const facility facility_;
-	const severity severity_;
+	const Facility facility_;
+	const Severity severity_;
 	const std::string source_;
 	const std::string message_;
 };
 
-std::ostream& operator<<(std::ostream& os, const syslog_message& obj);
+std::ostream& operator<<(std::ostream& os, const Syslog_message& obj);
 
 
 #endif	/* SYSLOG_MESSAGE_H */

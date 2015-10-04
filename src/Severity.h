@@ -25,26 +25,29 @@ SOFTWARE.
 #ifndef SEVERITY_H
 #define	SEVERITY_H
 
-class facility;
+#include <string>
+#include <iosfwd>
 
-class severity final {
+class Facility;
+
+class Severity final {
 public:
-	explicit severity(const std::string&);
-	explicit severity(const char*);
-	explicit severity(std::istream&);
+	explicit Severity(const std::string&);
+	explicit Severity(const char*);
+	explicit Severity(std::istream&);
 
-	severity() = delete;
-	~severity() = default;
-	severity(const severity&) = default;
-	severity(severity&&) = default;
-	severity& operator=(const severity&) = default;
-	severity& operator=(severity&&) = default;
+	Severity() = delete;
+	~Severity() = default;
+	Severity(const Severity&) = default;
+	Severity(Severity&&) = default;
+	Severity& operator=(const Severity&) = default;
+	Severity& operator=(Severity&&) = default;
 
-	bool operator!=(const severity&) const;
-	bool operator==(const severity&) const;
+	bool operator!=(const Severity&) const;
+	bool operator==(const Severity&) const;
 
-	friend uint8_t operator+(const facility&, const severity&);
-	friend std::ostream& operator<<(std::ostream&, const severity&);
+	friend uint8_t operator+(const Facility&, const Severity&);
+	friend std::ostream& operator<<(std::ostream&, const Severity&);
 
 private:
 	const uint8_t value_;

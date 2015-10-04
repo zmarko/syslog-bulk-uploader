@@ -29,24 +29,25 @@ SOFTWARE.
 #include <boost/filesystem.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
 
-#include "../src/syslog_bulk_uploader.h"
-#include "../src/reader.h"
-#include "../src/writer.h"
-#include "../src/file_reader.h"
-#include "../src/udp_writer.h"
-#include "udp_syslog_server.h"
+#include "../src/Syslog_bulk_uploader.h"
+#include "../src/Syslog_message.h"
+#include "../src/Reader.h"
+#include "../src/Writer.h"
+#include "../src/File_reader.h"
+#include "../src/Udp_writer.h"
+#include "Udp_syslog_server.h"
 #include "../src/RFC3164_fmt.h"
 
 using namespace std;
 
-class mock_reader : public reader {
+class Mock_reader : public Reader {
 public:
-	virtual unique_ptr<const syslog_message> next_message() override {
+	virtual unique_ptr<const Syslog_message> next_message() override {
 		if (pos_ >= messages_.size()) {
-			return unique_ptr<syslog_message>();
+			return unique_ptr<Syslog_message>();
 		} else {
 			stringstream ss(messages_[pos_++]);
-			return unique_ptr<syslog_message>(new syslog_message(dynamic_cast<istream&> (ss)));
+			return unique_ptr<Syslog_message>(new Syslog_message(dynamic_cast<istream&> (ss)));
 		}
 	}
 private:
@@ -58,28 +59,28 @@ private:
 	size_t pos_{};
 };
 
-class mock_writer : public writer {
+class Mock_writer : public Writer {
 public:
-	virtual void send(const syslog_message& msg) override {
+	virtual void write(const Syslog_message& msg) override {
 		messages.push_back(&msg);
 		cout << msg << endl;
 	};
-	vector<const syslog_message*> messages;
+	vector<const Syslog_message*> messages;
 };
 
 BOOST_AUTO_TEST_CASE(test_run) {
-	mock_reader r;
-	mock_writer w;
-	syslog_bulk_uploader ul(r, w);
+	Mock_reader r;
+	Mock_writer w;
+	Syslog_bulk_uploader ul(r, w);
 	ul.run();
 	BOOST_CHECK_EQUAL(w.messages.size(), 3);
 }
 
 BOOST_AUTO_TEST_CASE(test_file_reader) {
 	cout << "Running in " << boost::filesystem::initial_path() << endl;
-	file_reader r("../test/sample1");
-	mock_writer w;
-	syslog_bulk_uploader ul(r, w);
+	File_reader r("../test/sample1");
+	Mock_writer w;
+	Syslog_bulk_uploader ul(r, w);
 	ul.run();
 	BOOST_CHECK_EQUAL(w.messages.size(), 3);
 }
@@ -89,10 +90,10 @@ BOOST_AUTO_TEST_CASE(test_udp_writer) {
 
 	ptime start(second_clock::local_time());
 	boost::asio::io_service ios;
-	file_reader r("../test/sample1");
-	udp_writer w("127.0.0.1", 51514);
-	syslog_bulk_uploader ul(r, w);
-	udp_syslog_server server(ios, 51514, 2000);
+	File_reader r("../test/sample1");
+	Udp_writer w("127.0.0.1", 51514);
+	Syslog_bulk_uploader ul(r, w);
+	Udp_syslog_server server(ios, 51514, 2000);
 	ul.run();
 
 	while (second_clock::local_time() - start < seconds(2)) {
@@ -102,7 +103,7 @@ BOOST_AUTO_TEST_CASE(test_udp_writer) {
 	BOOST_CHECK_EQUAL(server.messages().size(), 3);
 
 	auto it = server.messages().begin();
-	file_reader r2("../test/sample1");
+	File_reader r2("../test/sample1");
 	while (auto msg = r2.next_message()) {
 		RFC3164_fmt fmt(*msg);
 		BOOST_CHECK_EQUAL(*it, fmt());

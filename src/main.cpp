@@ -25,11 +25,12 @@ SOFTWARE.
 #include <iostream>
 #include <string>
 #include <boost/program_options.hpp>
+#include <boost/date_time/posix_time/posix_time.hpp>
 
 #include "src/config.h"
-#include "syslog_bulk_uploader.h"
-#include "file_reader.h"
-#include "udp_writer.h"
+#include "Syslog_bulk_uploader.h"
+#include "File_reader.h"
+#include "Udp_writer.h"
 
 namespace po = boost::program_options;
 using namespace std;
@@ -54,7 +55,7 @@ void help() {
 	desc.print(cout);
 }
 
-void after_send_cb(const syslog_message&) {
+void after_send_cb(const Syslog_message&) {
 	ptime now = second_clock::local_time();
 	if (now - last_print > print_interval) {
 		cout << "." << flush;
@@ -105,13 +106,13 @@ int main(int argc, char** argv) {
 		return -1;
 	}
 
-	udp_writer w(dest, port);
+	Udp_writer w(dest, port);
 
 	last_print = start = second_clock::local_time();
 	for (const auto& file : files) {
 		try {
-			file_reader r(file);
-			syslog_bulk_uploader uploader(r, w, mps);
+			File_reader r(file);
+			Syslog_bulk_uploader uploader(r, w, mps);
 			uploader.add_after_send_cb(bind(after_send_cb, placeholders::_1));
 			cout << "Sending logs from " << file << " to udp://" << dest << ":" << port
 				<< " at a max rate of " << mps << " messages per second " << flush;

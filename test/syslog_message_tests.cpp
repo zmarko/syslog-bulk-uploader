@@ -30,17 +30,17 @@ SOFTWARE.
 BOOST_AUTO_TEST_CASE(parsing) {
     std::stringstream source("2015-09-02 13:33:11     Local4.Critical 192.168.0.1     Kiwi_Syslog_Server %ASA-2-106007: Deny inbound UDP from 1.2.3.4/22084 to 4.3.2.1/53 due to DNS Query");
     boost::posix_time::ptime timestamp_(boost::posix_time::time_from_string("2015-09-02 13:33:11"));
-    syslog_message m(source);
+    Syslog_message m(source);
     BOOST_CHECK_EQUAL(m.timestamp(), timestamp_);
-    BOOST_CHECK_EQUAL(m.fac(), facility("Local4"));
-    BOOST_CHECK_EQUAL(m.sev(), severity("Critical"));
+    BOOST_CHECK_EQUAL(m.fac(), Facility("Local4"));
+    BOOST_CHECK_EQUAL(m.sev(), Severity("Critical"));
     BOOST_CHECK_EQUAL(m.source(), "192.168.0.1");
     BOOST_CHECK_EQUAL(m.message(), "Kiwi_Syslog_Server %ASA-2-106007: Deny inbound UDP from 1.2.3.4/22084 to 4.3.2.1/53 due to DNS Query");
 }
 
 BOOST_AUTO_TEST_CASE(invalid_params) {
-    BOOST_CHECK_THROW(facility("invalid"), std::string);
-    BOOST_CHECK_THROW(severity("invalid"), std::string);
-    BOOST_CHECK_NO_THROW(facility("Local0"));
-    BOOST_CHECK_NO_THROW(severity("Critical"));
+    BOOST_CHECK_THROW(Facility("invalid"), std::string);
+    BOOST_CHECK_THROW(Severity("invalid"), std::string);
+    BOOST_CHECK_NO_THROW(Facility("Local0"));
+    BOOST_CHECK_NO_THROW(Severity("Critical"));
 }

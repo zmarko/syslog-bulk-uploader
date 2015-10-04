@@ -22,17 +22,16 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 
-
 #ifndef WRITER_H
 #define	WRITER_H
 
-#include "syslog_message.h"
+class Syslog_message;
 
-class writer {
+class Writer {
 public:
 
-	virtual ~writer() {};
-	virtual void send(const syslog_message&) = 0;
+	virtual ~Writer() {};
+	virtual void write(const Syslog_message&) = 0;
 };
 
 #endif	/* WRITER_H */
