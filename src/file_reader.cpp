@@ -1,7 +1,7 @@
 /*
 The MIT License (MIT)
 
-Copyright (c) 2015 Marko Živanovi?
+Copyright (c) 2015 Marko Å½ivanovi?
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -23,7 +23,7 @@ SOFTWARE.
 */
 
 #include "File_reader.h"
-#include "syslog_message.h"
+#include "Syslog_message.h"
 
 using namespace std;
 

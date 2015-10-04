@@ -46,4 +46,4 @@ const string RFC3164_fmt::operator()() {
 		ret = ret.substr(0, max_msg_len);
 	}
 	return ret;
-};
+}

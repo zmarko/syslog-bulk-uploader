@@ -48,7 +48,7 @@ public:
 	const Severity sev() const;
 	const std::string source() const;
 	const std::string message() const;
-	const uint8_t priority() const;
+	uint8_t priority() const;
 
 private:
 	const boost::posix_time::ptime timestamp_;
