@@ -28,7 +28,7 @@ SOFTWARE.
 #include "Writer.h"
 #include "Frequency_limit.h"
 
-Syslog_bulk_uploader::syslog_bulk_uploader(reader& r, writer& w, const size_t mps)
+Syslog_bulk_uploader::Syslog_bulk_uploader(Reader& r, Writer& w, const size_t mps)
 	: reader_(r), writer_(w), mps_(mps) {}
 
 void Syslog_bulk_uploader::run() {

@@ -32,7 +32,7 @@ namespace {
 }
 
 RFC3164_fmt::RFC3164_fmt(const Syslog_message& m)
-	: message_{ m } {};
+	: message_{ m } {}
 
 const string RFC3164_fmt::operator()() {
 	stringstream stream;

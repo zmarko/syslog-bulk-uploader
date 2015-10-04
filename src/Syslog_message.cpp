@@ -116,7 +116,7 @@ const std::string Syslog_message::message() const {
 	return message_;
 }
 
-uint8_t syslog_message::priority() const {
+uint8_t Syslog_message::priority() const {
 	return facility_ + severity_;
 }
 
